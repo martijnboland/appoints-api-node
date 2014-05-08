@@ -1,0 +1,17 @@
+{
+  "name": "appoints2",
+  "version": "0.1.0",
+  "description": "An appointment scheduler service",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "~1.0.x",
+    "express": "~4.x",
+    "leisure": "^0.1.0",
+    "passport": "^0.2.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Martijn Boland",
+  "license": "MIT"
+}
