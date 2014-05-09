@@ -1,3 +1,6 @@
+var jwt = require('jsonwebtoken');
+var config = require('../config');
+
 exports.index = function(req, res){
   res.send({
     message: 'Appoints service API',
@@ -11,3 +14,12 @@ exports.index = function(req, res){
     }]
   })
 };
+
+exports.loggedin = function(req, res) {
+  var token = jwt.sign(req.user, config.tokenSecret, { expiresInMinutes: 60*5 });
+  res.send({
+    message: 'Authentication successfull',
+    token: token,
+    _links: [{ self: { href: '/'} }, { me: { href: '/me' } }, { appointments: { href: '/appointments' } }]
+  });
+}

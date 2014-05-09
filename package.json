@@ -6,8 +6,13 @@
   "dependencies": {
     "body-parser": "~1.0.x",
     "express": "~4.x",
+    "express-jwt": "^0.2.1",
+    "jsonwebtoken": "^0.4.0",
     "leisure": "^0.1.0",
-    "passport": "^0.2.0"
+    "passport": "^0.2.0",
+    "passport-facebook": "^1.0.3",
+    "passport-google-oauth": "^0.1.5",
+    "passport-google-plus": "^0.2.0"
   },
   "scripts": {
     "start": "node server.js"
