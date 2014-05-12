@@ -29,7 +29,7 @@ exports.ensureAuthenticated =  function (req, res, next) {
     notAuthenticated('No Authorization header was found');
   }
 
-  jwt.verify(token, config.tokenSecret, null, function(err, decoded) {
+  jwt.verify(token, config.settings.tokenSecret, null, function(err, decoded) {
     if (err) {
       notAuthenticated('Invalid or expired token.');
     }

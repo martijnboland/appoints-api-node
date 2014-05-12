@@ -9,7 +9,7 @@ var mediaTypes = [
   { contentType: 'application/json' }
 ];
 
-passportConfig.configStrategies();
+passportConfig.configure();
 
 var app = express();
 app.use(bodyParser());

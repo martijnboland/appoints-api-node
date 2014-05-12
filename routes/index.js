@@ -16,7 +16,7 @@ exports.index = function(req, res){
 };
 
 exports.loggedin = function(req, res) {
-  var token = jwt.sign(req.user, config.tokenSecret, { expiresInMinutes: 60*5 });
+  var token = jwt.sign(req.user, config.settings.tokenSecret, { expiresInMinutes: 60*5 });
   res.send({
     message: 'Authentication successfull',
     token: token,

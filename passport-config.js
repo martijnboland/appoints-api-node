@@ -3,7 +3,7 @@ var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-exports.configStrategies = function () {
+exports.configure = function () {
 
   passport.use(new FacebookStrategy({
       clientID: config.settings.authProviders.facebook.clientId,
@@ -24,6 +24,14 @@ exports.configStrategies = function () {
       return handleProviderResponse('google', profile.id, profile.emails[0].value, profile.displayName, done);
     }
   ));
+
+  passport.serializeUser(function (user, done) {
+    done(null, user);
+  });
+
+  passport.deserializeUser(function (user, done) {
+    done(null, user);
+  });
 
 }
 
