@@ -1,9 +1,8 @@
-var middleware = require('./routes/middleware');
-var index = require('./routes/index');
-var auth = require('./routes/auth');
-var me = require('./routes/me');
+var middleware = require('./routehandlers/middleware');
+var index = require('./routehandlers/index');
+var auth = require('./routehandlers/auth');
+var me = require('./routehandlers/me');
 var passport = require('passport');
-var config = require('./config');
 
 module.exports = function(router) {
 
