@@ -11,7 +11,7 @@ exports.configure = function () {
       callbackURL: config.settings.authProviders.facebook.callbackUrl
     },
     function(accessToken, refreshToken, profile, done) {
-      return handleProviderResponse('facebook', profile.id, profile.emails[0].value, profile.displayName, done);
+      return handleProviderResponse('facebook', accessToken, profile.id, profile.emails[0].value, profile.displayName, done);
     }
   ));
 
@@ -21,7 +21,7 @@ exports.configure = function () {
       callbackURL: config.settings.authProviders.google.callbackUrl
     },
     function(accessToken, refreshToken, profile, done) {
-      return handleProviderResponse('google', profile.id, profile.emails[0].value, profile.displayName, done);
+      return handleProviderResponse('google', accessToken, profile.id, profile.emails[0].value, profile.displayName, done);
     }
   ));
 
@@ -29,15 +29,16 @@ exports.configure = function () {
     done(null, user);
   });
 
-  passport.deserializeUser(function (user, done) {
-    done(null, user);
+  passport.deserializeUser(function (obj, done) {
+    done(null, obj);
   });
 
 }
 
-function handleProviderResponse(provider, userId, email, displayName, done) {
+function handleProviderResponse(provider, accessToken, userId, email, displayName, done) {
   var user = {
     provider: provider,
+    providerAccessToken: accessToken,
     userId: userId,
     email: email,
     displayName: displayName
