@@ -1,6 +1,8 @@
-var jwt = require('jsonwebtoken');
 var config = require('../config');
 var passport = require('passport');
+var security = require('../infrastructure/security');
+
+var tokenExpiresInMinutes = 60;
 
 exports.loggedin = function(req, res) {
   sendLoggedInResponseForUser(req.user, res);
@@ -33,7 +35,7 @@ exports.googletoken = function(req, res) {
 function sendLoggedInResponseForUser(user, res) {
   res.send({
     message: 'Authentication successful',
-    token: createTokenForUser(user),
+    token: security.createTokenForUser(user, tokenExpiresInMinutes),
     _links: [{ self: { href: '/'} }, { me: { href: '/me' } }, { appointments: { href: '/appointments' } }]
   });
 }
@@ -52,9 +54,4 @@ function createUserFromProfile(profile) {
     email: profile.emails[0].value,
     displayName: profile.displayName
   };
-}
-
-function createTokenForUser(user) {
-  var token = jwt.sign(user, config.settings.tokenSecret, { expiresInMinutes: 60*5 });
-  return token;
 }

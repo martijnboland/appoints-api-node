@@ -31,7 +31,7 @@ exports.ensureAuthenticated =  function (req, res, next) {
 
   jwt.verify(token, config.settings.tokenSecret, null, function(err, decoded) {
     if (err) {
-      notAuthenticated('Invalid or expired token.');
+      notAuthenticated('Invalid or expired token');
     }
     req.user = decoded;
     next();
@@ -41,7 +41,7 @@ exports.ensureAuthenticated =  function (req, res, next) {
     res.send('401', { 
       message: 'Access to ' + req.path + ' is not allowed.',
       details: details,
-      links: [{
+      _links: [{
         auth_facebook: { href: '/auth/facebook' }
       }, {
         auth_google: { href: '/auth/google' }
