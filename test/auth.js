@@ -40,7 +40,6 @@ describe('Authentication tests', function () {
     it('returns a 401 when an invalid facebook token is sent', function (done) {
       request(app)
         .post('/auth/facebook')
-        .set('Accept', 'application/json')
         .send({ token: 'an invalid token'})
         .expect(401)
         .end(function (err, res) {
@@ -57,7 +56,6 @@ describe('Authentication tests', function () {
     it('returns a 401 when an invalid google token is sent', function (done) {
       request(app)
         .post('/auth/google')
-        .set('Accept', 'application/json')
         .send({ token: 'an invalid token'})
         .expect(401)
         .end(function (err, res) {
@@ -81,7 +79,6 @@ describe('Authentication tests', function () {
     it('returns a 401 response when no authorization header is set', function (done) {
       request(app)
         .get('/me')
-        .set('Accept', 'application/json')
         .expect(401)
         .end(function (err, res) {
           should.not.exist(err);
@@ -93,7 +90,6 @@ describe('Authentication tests', function () {
     it('returns a 401 response when an invalid header is set', function (done) {
       request(app)
         .get('/me')
-        .set('Accept', 'application/json')
         .set('authorization', 'blahblah')
         .expect(401)
         .end(function (err, res) {
@@ -106,7 +102,6 @@ describe('Authentication tests', function () {
     it('returns a 401 response when an invalid authorization token is set', function (done) {
       request(app)
         .get('/me')
-        .set('Accept', 'application/json')
         .set('authorization', 'Bearer blahblah')
         .expect(401)
         .end(function (err, res) {
@@ -121,7 +116,6 @@ describe('Authentication tests', function () {
 
       request(app)
         .get('/me')
-        .set('Accept', 'application/json')
         .set('authorization', 'Bearer ' + expiredToken)
         .expect(401)
         .end(function (err, res) {
@@ -136,7 +130,6 @@ describe('Authentication tests', function () {
 
       request(app)
         .get('/me')
-        .set('Accept', 'application/json')
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .end(function (err, res) {

@@ -5,8 +5,8 @@ var passport = require('passport');
 var passportConfig = require('./passport-config');
 
 var mediaTypes = [
-  { contentType: 'application/hal+json' },
-  { contentType: 'application/json' }
+  { contentType: 'application/json' },
+  { contentType: 'application/hal+json' }
 ];
 
 passportConfig.configure();
