@@ -24,3 +24,5 @@ var port = process.env.PORT || 3000;
 app.listen(port);
 
 console.log('Appoints service started on port ' + port);
+
+exports.app = app;
