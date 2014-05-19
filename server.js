@@ -20,9 +20,11 @@ var apiRouter = express.Router();
 require('./routes')(apiRouter);
 app.use('/', apiRouter);
 
-var port = process.env.PORT || 3000;
-app.listen(port);
-
-console.log('Appoints service started on port ' + port);
+function start () {
+  var port = process.env.PORT || 3000;
+  app.listen(port);
+  console.log('Appoints service started on port ' + port);
+}
 
 exports.app = app;
+exports.start = start;

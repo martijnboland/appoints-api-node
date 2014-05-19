@@ -8,6 +8,7 @@
     "express": "~4.x",
     "jsonwebtoken": "^0.4.0",
     "leisure": "^0.1.0",
+    "mongoose": "^3.8.9",
     "passport": "^0.2.0",
     "passport-facebook": "^1.0.3",
     "passport-google-oauth": "^0.1.5",
@@ -19,7 +20,7 @@
     "supertest": "^0.12.1"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "node index.js",
     "test": "mocha --reporter spec test"
   },
   "author": "Martijn Boland",
