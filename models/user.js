@@ -8,7 +8,7 @@ var roles = {
 };
 
 var UserSchema = new Schema({
-  userId: { type: String, required: true, index: { unique: true } },
+  userId: { type: String, required: true },
   email: { type: String, required: true },
   name: { type: String, required: true },
   provider: { type: String, required: true },
@@ -19,8 +19,23 @@ var UserSchema = new Schema({
   roles: { type: [String], default: [roles.customer] }
 });
 
-UserSchema.static('allRoles', function () {
+UserSchema.index({ userId: 1, provider: 1 }, { unique: true });
+
+UserSchema.methods.isInRole = function (role) {
+  for (i = 0; i < this.roles.length; i++) {
+    if (this.roles[i] === role) {
+      return true;
+    }
+  }
+  return false;
+};
+
+UserSchema.statics.allRoles = function () {
   return roles;
-});
+};
+
+UserSchema.statics.findByUserIdAndProvider = function (userId, provider, callback) {
+  this.findOne({ userId: userId, provider: provider }, callback);
+};
 
 module.exports = mongoose.model('User', UserSchema);
