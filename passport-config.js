@@ -2,6 +2,7 @@ var config = require('./config');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var User = require('./models/user');
 
 exports.configure = function () {
 
@@ -11,7 +12,7 @@ exports.configure = function () {
       callbackURL: config.settings.authProviders.facebook.callbackUrl
     },
     function(accessToken, refreshToken, profile, done) {
-      return handleProviderResponse('facebook', profile.id, profile.emails[0].value, profile.displayName, done);
+      return handleProviderResponse('facebook', profile.id, profile.emails[0].value, profile.displayName, accessToken, refreshToken, done);
     }
   ));
 
@@ -21,7 +22,7 @@ exports.configure = function () {
       callbackURL: config.settings.authProviders.google.callbackUrl
     },
     function(accessToken, refreshToken, profile, done) {
-      return handleProviderResponse('google', profile.id, profile.emails[0].value, profile.displayName, done);
+      return handleProviderResponse('google', profile.id, profile.emails[0].value, profile.displayName, accessToken, refreshToken, done);
     }
   ));
 
@@ -35,12 +36,27 @@ exports.configure = function () {
 
 }
 
-function handleProviderResponse(provider, userId, email, displayName, done) {
-  var user = {
-    provider: provider,
-    userId: userId,
-    email: email,
-    displayName: displayName
-  };
-  done(null, user);
+function handleProviderResponse(provider, userId, email, displayName, accessToken, refreshToken, callback) {
+  User.findByUserIdAndProvider(userId, provider, function (err, dbUser) {
+    if (! dbUser) {
+      dbUser = new User({
+        provider: provider,
+        userId: userId,
+        email: email, 
+        name: displayName
+      });
+    }
+
+    dbUser.providerAccessToken = accessToken;
+    dbUser.providerRefreshToken = refreshToken;
+    dbUser.lastAuthenticated = new Date();
+
+    dbUser.save(function (err, dbUser) {
+      if (err) {
+        throw err;
+      }
+      callback(null, dbUser);
+    });
+  });
+
 }
