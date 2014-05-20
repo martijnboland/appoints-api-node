@@ -6,7 +6,7 @@ var should = require('should');
 var testUserData = {
   userId: 'test user id',
   email: 'test@test.com',
-  name: 'Test user',
+  displayName: 'Test user',
   provider: 'Test'
 };
 

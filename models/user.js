@@ -10,7 +10,7 @@ var roles = {
 var UserSchema = new Schema({
   userId: { type: String, required: true },
   email: { type: String, required: true },
-  name: { type: String, required: true },
+  displayName: { type: String, required: true },
   provider: { type: String, required: true },
   providerAccessToken: String,
   providerRefreshToken: String,

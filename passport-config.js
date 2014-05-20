@@ -43,7 +43,7 @@ function handleProviderResponse(provider, userId, email, displayName, accessToke
         provider: provider,
         userId: userId,
         email: email, 
-        name: displayName
+        displayName: displayName
       });
     }
 

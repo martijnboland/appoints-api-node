@@ -2,6 +2,9 @@ var should = require('should');
 var request = require('supertest');  
 var app = require('../server').app;
 var security = require('../infrastructure/security');
+var mongoose = require('mongoose');
+var User = require('../models/user');
+var config = require('../config');
 
 describe('Authentication tests', function () {
 
@@ -68,14 +71,17 @@ describe('Authentication tests', function () {
   });
 
   describe('GET /me', function () {
+    var user = {};
 
-    var user = {
-      provider: 'test',
-      userId: 1,
-      email: 'testuser@test.com',
-      displayName: 'testUser'
-    }
-
+    before(function (done) {
+      mongoose.connect(config.settings.db.connectionString);
+      var dbUser = new User({ provider: 'Test', userId: 'Test userId', email: 'test@test.com', displayName: 'Test user' } );
+      dbUser.save(function(err, savedUser) {
+        user = savedUser;
+        done();
+      });
+    });
+      
     it('returns a 401 response when no authorization header is set', function (done) {
       request(app)
         .get('/me')
@@ -125,7 +131,7 @@ describe('Authentication tests', function () {
         })    
     });
 
-    it('returns a 200 response with the user properties when an proper authorization token is set', function (done) {
+    it('returns a 200 response with the user properties when a proper authorization token is set', function (done) {
       var token = security.createTokenForUser(user, 60);
 
       request(app)
@@ -140,6 +146,16 @@ describe('Authentication tests', function () {
           res.body.displayName.should.equal(user.displayName);
           done();
         })    
+    });
+
+    after(function (done) {
+      User.remove({}, function(err) {
+        mongoose.disconnect();
+        if (err) {
+          throw err;
+        }
+        done();
+      });
     });
 
   });

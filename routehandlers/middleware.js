@@ -1,5 +1,6 @@
 var jwt = require('jsonwebtoken');
 var config = require('../config');
+var User = require('../models/user');
 
 exports.ensureAuthenticated =  function (req, res, next) {
   var token;
@@ -33,8 +34,17 @@ exports.ensureAuthenticated =  function (req, res, next) {
     if (err) {
       notAuthenticated('Invalid or expired token');
     }
-    req.user = decoded;
-    next();
+    else {
+      User.findById(decoded.id, function (err, dbUser) {
+        if (err || (! dbUser)) {
+          notAuthenticated('Valid token, but we could not find a corresponding user in our database.');
+        }
+        else {
+          req.user = dbUser;
+          next();
+        }
+      });
+    }
   });
 
   function notAuthenticated(details) {
