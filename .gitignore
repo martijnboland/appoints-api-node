@@ -1,3 +1,4 @@
 node_modules
-config.js
-config-test.js
+config/development.js
+config/test.js
+config/production.js

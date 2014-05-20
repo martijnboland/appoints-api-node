@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "mocha --reporter spec test"
+    "test": "NODE_ENV=test mocha --reporter spec test"
   },
   "author": "Martijn Boland",
   "license": "MIT"

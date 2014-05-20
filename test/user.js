@@ -1,9 +1,9 @@
 var User = require('../models/user');
 var mongoose = require('mongoose');
-var config = require('../config-test');
+var config = require('../config');
 var should = require('should');
 
-describe('User persistence tests', function() {
+describe('User persistence tests (env: ' + process.env.NODE_ENV + ')', function() {
   beforeEach(function (done) {
     mongoose.connect(config.settings.db.connectionString);
     User.remove({}, function(err) {
