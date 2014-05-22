@@ -1,4 +1,5 @@
-var should = require('should'); 
+/* global describe, it, before, after */
+var should = require('should');
 var request = require('supertest');  
 var app = require('../server').app;
 var security = require('../infrastructure/security');
@@ -16,7 +17,7 @@ describe('Authentication tests', function () {
         .expect(302)
         .end(function (err, res) {
           should.not.exist(err);
-          res.header['location'].should.include('facebook');
+          res.header.location.should.include('facebook');
           done();
         });
     });
@@ -31,7 +32,7 @@ describe('Authentication tests', function () {
         .expect(302)
         .end(function (err, res) {
           should.not.exist(err);
-          res.header['location'].should.include('google');
+          res.header.location.should.include('google');
           done();
         });
     });

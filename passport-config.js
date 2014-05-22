@@ -4,6 +4,30 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var User = require('./models/user');
 
+function handleProviderResponse(provider, userId, email, displayName, accessToken, refreshToken, callback) {
+  User.findByUserIdAndProvider(userId, provider, function (err, dbUser) {
+    if (! dbUser) {
+      dbUser = new User({
+        provider: provider,
+        userId: userId,
+        email: email, 
+        displayName: displayName
+      });
+    }
+
+    dbUser.providerAccessToken = accessToken;
+    dbUser.providerRefreshToken = refreshToken;
+    dbUser.lastAuthenticated = new Date();
+
+    dbUser.save(function (err, dbUser) {
+      if (err) {
+        throw err;
+      }
+      callback(null, dbUser);
+    });
+  });
+}
+
 exports.configure = function () {
 
   passport.use(new FacebookStrategy({
@@ -32,31 +56,6 @@ exports.configure = function () {
 
   passport.deserializeUser(function (obj, done) {
     done(null, obj);
-  });
-
-}
-
-function handleProviderResponse(provider, userId, email, displayName, accessToken, refreshToken, callback) {
-  User.findByUserIdAndProvider(userId, provider, function (err, dbUser) {
-    if (! dbUser) {
-      dbUser = new User({
-        provider: provider,
-        userId: userId,
-        email: email, 
-        displayName: displayName
-      });
-    }
-
-    dbUser.providerAccessToken = accessToken;
-    dbUser.providerRefreshToken = refreshToken;
-    dbUser.lastAuthenticated = new Date();
-
-    dbUser.save(function (err, dbUser) {
-      if (err) {
-        throw err;
-      }
-      callback(null, dbUser);
-    });
   });
 
 }

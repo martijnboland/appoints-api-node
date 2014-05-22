@@ -1,7 +1,7 @@
+/* global describe, it */
 var should = require('should'); 
 var request = require('supertest');  
 var app = require('../server').app;
-
 
 describe('Basic route tests', function () {
   describe('GET /', function () {
@@ -16,7 +16,6 @@ describe('Basic route tests', function () {
           res.body.should.have.property('message');
           res.body.should.have.property('details');
           res.body.should.have.property('_links');
-          res.body._links.length.should.be.above(0);
           done();
         });
     });
@@ -34,7 +33,6 @@ describe('Basic route tests', function () {
           res.body.should.have.property('message');
           res.body.should.have.property('details');
           res.body.should.have.property('_links');
-          res.body._links.length.should.be.above(0);
           done();
         })    
     });

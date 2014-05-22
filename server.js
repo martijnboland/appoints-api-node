@@ -16,9 +16,8 @@ app.use(bodyParser());
 app.use(leisure.accept(mediaTypes));
 app.use(passport.initialize());
 
-var apiRouter = express.Router();
-require('./routes')(apiRouter);
-app.use('/', apiRouter);
+var routes = require('./routes');
+app.use('/', routes.router);
 
 function start () {
   var port = process.env.PORT || 3000;

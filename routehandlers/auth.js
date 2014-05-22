@@ -4,6 +4,34 @@ var security = require('../infrastructure/security');
 
 var tokenExpiresInMinutes = 60;
 
+function sendLoggedInResponseForUser(user, res) {
+  res.send({
+    message: 'Authentication successful',
+    token: security.createTokenForUser(user, tokenExpiresInMinutes),
+    _links: { 
+      self: { href: '/'},
+      me: { href: '/me' }, 
+      appointments: { href: '/appointments' } 
+    }
+  });
+}
+
+function sendTokenValidationError(res, err) {
+  res.send('401', {
+    message: 'Access denied (unable to authenticate)',
+    details: err
+  });
+}
+
+function createUserFromProfile(profile) {
+  return {
+    provider: profile.provider,
+    userId: profile.id,
+    email: profile.emails[0].value,
+    displayName: profile.displayName
+  };
+}
+
 exports.loggedin = function(req, res) {
   sendLoggedInResponseForUser(req.user, res);
 }
@@ -30,28 +58,4 @@ exports.googletoken = function(req, res) {
     var user = createUserFromProfile(profile);
     sendLoggedInResponseForUser(user, res);
   });
-}
-
-function sendLoggedInResponseForUser(user, res) {
-  res.send({
-    message: 'Authentication successful',
-    token: security.createTokenForUser(user, tokenExpiresInMinutes),
-    _links: [{ self: { href: '/'} }, { me: { href: '/me' } }, { appointments: { href: '/appointments' } }]
-  });
-}
-
-function sendTokenValidationError(res, err) {
-  res.send('401', {
-    message: 'Access denied (unable to authenticate)',
-    details: err
-  });
-}
-
-function createUserFromProfile(profile) {
-  return {
-    provider: profile.provider,
-    userId: profile.id,
-    email: profile.emails[0].value,
-    displayName: profile.displayName
-  };
 }

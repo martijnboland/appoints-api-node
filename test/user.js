@@ -1,3 +1,4 @@
+/* global describe, beforeEach, afterEach, it*/
 var User = require('../models/user');
 var mongoose = require('mongoose');
 var config = require('../config');

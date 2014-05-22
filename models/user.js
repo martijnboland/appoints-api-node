@@ -1,4 +1,3 @@
-
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -22,7 +21,7 @@ var UserSchema = new Schema({
 UserSchema.index({ userId: 1, provider: 1 }, { unique: true });
 
 UserSchema.methods.isInRole = function (role) {
-  for (i = 0; i < this.roles.length; i++) {
+  for (var i = 0; i < this.roles.length; i++) {
     if (this.roles[i] === role) {
       return true;
     }

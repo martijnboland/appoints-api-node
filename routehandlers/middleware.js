@@ -3,20 +3,33 @@ var config = require('../config');
 var User = require('../models/user');
 
 exports.ensureAuthenticated =  function (req, res, next) {
+
+  function notAuthenticated(details) {
+    res.send('401', { 
+      message: 'Access to ' + req.path + ' is not allowed.',
+      details: details,
+      _links: {
+        auth_facebook: { href: '/auth/facebook' }, 
+        auth_google: { href: '/auth/google' }
+      }
+    });
+  }
+
   var token;
     
   if (req.method === 'OPTIONS' && req.headers.hasOwnProperty('access-control-request-headers')) {
     for (var ctrlReqs = req.headers['access-control-request-headers'].split(','),i=0; i < ctrlReqs.length; i++) {
-      if (ctrlReqs[i].indexOf('authorization') != -1) 
+      if (ctrlReqs[i].indexOf('authorization') !== -1) {
         return next();
+      }
     }
   }
         
   if (req.headers && req.headers.authorization) {
     var parts = req.headers.authorization.split(' ');
-    if (parts.length == 2) {
-      var scheme = parts[0]
-        , credentials = parts[1];
+    if (parts.length === 2) {
+      var scheme = parts[0], 
+        credentials = parts[1];
         
       if (/^Bearer$/i.test(scheme)) {
         token = credentials;
@@ -46,19 +59,5 @@ exports.ensureAuthenticated =  function (req, res, next) {
       });
     }
   });
-
-  function notAuthenticated(details) {
-    res.send('401', { 
-      message: 'Access to ' + req.path + ' is not allowed.',
-      details: details,
-      _links: [{
-        auth_facebook: { href: '/auth/facebook' }
-      }, {
-        auth_google: { href: '/auth/google' }
-      }]
-    });
-
-  }
+  
 };
-
-
