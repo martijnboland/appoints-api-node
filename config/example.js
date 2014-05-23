@@ -1,4 +1,4 @@
-// This is an example configuration file. Rename this file to development.js 
+// This is an example configuration file. Rename this file to development.js or test.js
 // and set the values to get going.
 var settings = {
   db: {
