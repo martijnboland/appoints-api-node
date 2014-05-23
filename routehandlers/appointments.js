@@ -85,10 +85,8 @@ exports.update = function (req, res) {
       res.send(404, { message: 'Appointment can not be found' });
     } 
     else {
-      dbAppointment.title = req.body.title;
-      dbAppointment.dateAndTime = req.body.dateAndTime;
-      dbAppointment.duration = req.body.duration;
-      dbAppointment.remarks = req.body.remarks;
+      // maybe we should add a check for a complete object in case of a PUT request?
+      dbAppointment.set(req.body) // updated object values from request body.
       dbAppointment.save(function (err, updatedDbAppointment) {
         if (err) {
           if (err.name === 'ValidationError') {

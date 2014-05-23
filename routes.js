@@ -48,6 +48,7 @@ router.route('/appointments/:id')
   .all(middleware.ensureAuthenticated)
   .get(appointments.getById)
   .put(appointments.update)
+  .patch(appointments.update)
   .delete(appointments.delete);
 
 // --
