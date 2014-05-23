@@ -15,13 +15,6 @@ var testUserData = {
   provider: 'Test'
 };
 
-var testAppointment = {
-  title: 'Regular full massage',
-  dateAndTime: new Date("June 13, 2014 16:00:00"),
-  duration: 60,
-  remarks: 'Same oil as last time?'
-}
-
 var user = null;
 var token = null;
 
@@ -107,6 +100,13 @@ describe('Appointment tests', function () {
 
   describe('POST /appointments', function () {
 
+    var testAppointment = {
+      title: 'Regular full massage',
+      dateAndTime: '2014-06-13T16:00:00.000Z',
+      duration: 60,
+      remarks: 'I\'d like the same oil as last time.'
+    }
+
     it('returns a 401 when not authenticated', function (done) {
       request(app)
         .post('/appointments')
@@ -141,6 +141,140 @@ describe('Appointment tests', function () {
         .end(function (err, res) {
           should.not.exist(err);
           done();
+        });
+    });
+
+  });
+
+  describe('PUT /appointments/:id', function () {
+    var existingAppointment = null;
+
+    beforeEach(function (done) {
+      // Create one appointment in the database that is to be updated. 
+      var appointment = {
+        title: 'Testappointment 1',
+        user: { 
+          id: user.id,
+          displayName: user.displayName
+        },
+        dateAndTime: new Date("June 13, 2014 16:00:00"),
+        duration: 30
+      };
+
+      Appointment.create(appointment, function(err, dbAppointment) {
+        if (err) {
+          throw err;
+        }
+        existingAppointment = {
+          id: dbAppointment.id,
+          title: dbAppointment.title,
+          dateAndTime: dbAppointment.dateAndTime,
+          duration: dbAppointment.duration,
+          remarks: dbAppointment.remarks
+        }
+        done();
+      })
+    });
+
+    it('returns a 401 response when not authenticated', function (done) {
+      request(app)
+        .put('/appointments/' + existingAppointment.id)
+        .send(existingAppointment)
+        .expect(401)
+        .end(function (err, res) {
+          should.not.exist(err);
+          done();
+        });
+    });
+
+    it('returns a 404 response when the appointment is not found', function (done) {
+      request(app)
+        .put('/appointments/537e0a6795e2ee32ab736b1a') // bogus identifier
+        .set('authorization', 'Bearer ' + token)
+        .send(existingAppointment)
+        .expect(404)
+        .end(function (err, res) {
+          should.not.exist(err);
+          done();
+        });
+    });
+
+    it('returns a 200 response with the updated appointment', function (done) {
+      existingAppointment.dateAndTime = '2014-07-28T16:15:00.000Z'; // ISO date because this is the value we're going to PUT
+      request(app)
+        .put('/appointments/' + existingAppointment.id)
+        .set('authorization', 'Bearer ' + token)
+        .send(existingAppointment)
+        .expect(200)
+        .end(function (err, res) {
+          should.not.exist(err);
+          res.body.title.should.equal('Testappointment 1');
+          res.body.dateAndTime.should.equal('2014-07-28T16:15:00.000Z');
+          done();
+        });
+    });
+
+  });
+
+  describe('DELETE /appointments/:id', function () {
+    var existingAppointmentId = null;
+
+    beforeEach(function (done) {
+      // Create one appointment in the database that is to be updated. 
+      var appointment = {
+        title: 'Testappointment 1',
+        user: { 
+          id: user.id,
+          displayName: user.displayName
+        },
+        dateAndTime: new Date("June 13, 2014 16:00:00"),
+        duration: 30
+      };
+
+      Appointment.create(appointment, function(err, dbAppointment) {
+        if (err) {
+          throw err;
+        }
+        existingAppointmentId = dbAppointment.id;
+        done();
+      })
+    });
+
+    it('returns a 401 response when not authenticated', function (done) {
+      request(app)
+        .delete('/appointments/' + existingAppointmentId)
+        .expect(401)
+        .end(function (err, res) {
+          should.not.exist(err);
+          done();
+        });
+    });
+
+    it('returns a 404 response when the appointment is not found', function (done) {
+      request(app)
+        .delete('/appointments/537e0a6795e2ee32ab736b1a') // bogus identifier
+        .set('authorization', 'Bearer ' + token)
+        .expect(404)
+        .end(function (err, res) {
+          should.not.exist(err);
+          done();
+        });
+    });
+
+    it('returns a 200 response with a confirmation message when successful', function (done) {
+      request(app)
+        .delete('/appointments/' + existingAppointmentId)
+        .set('authorization', 'Bearer ' + token)
+        .expect(200)
+        .end(function (err, res) {
+          should.not.exist(err);
+          res.body.should.have.property('message');
+          // there should be no appointments in the database
+          Appointment.find({}, function(err, appointments) {
+            should.not.exist(err);
+            appointments.should.be.empty;
+            done();
+          });
         });
     });
 

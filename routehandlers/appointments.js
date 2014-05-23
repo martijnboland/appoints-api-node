@@ -6,6 +6,7 @@ function mapAppointment(dbAppointment) {
       self: { href: '/appointments/' + dbAppointment.id },
       user: { href: '/users/' + dbAppointment.user.id, title: dbAppointment.user.displayName }
     },
+    id: dbAppointment.id,
     title: dbAppointment.title,
     dateAndTime: dbAppointment.dateAndTime,
     duration: dbAppointment.duration,
@@ -75,10 +76,53 @@ exports.getByUser = function (req, res) {
 };
 
 exports.update = function (req, res) {
-
+  var appointmentId = req.params.id;
+  Appointment.findById(appointmentId, function(err, dbAppointment) {
+    if (err) {
+      throw err;
+    }
+    if (dbAppointment === null) {
+      res.send(404, { message: 'Appointment can not be found' });
+    } 
+    else {
+      dbAppointment.title = req.body.title;
+      dbAppointment.dateAndTime = req.body.dateAndTime;
+      dbAppointment.duration = req.body.duration;
+      dbAppointment.remarks = req.body.remarks;
+      dbAppointment.save(function (err, updatedDbAppointment) {
+        if (err) {
+          if (err.name === 'ValidationError') {
+            res.send(422, err);
+          }
+          else {
+            res.send(400, err);
+          }
+          return;
+        }
+        res.send(200, mapAppointment(updatedDbAppointment));
+      })
+    }
+  });
 };
 
 exports.delete = function (req, res) {
-
+  var appointmentId = req.params.id;
+  Appointment.findById(appointmentId, function(err, dbAppointment) {
+    if (err) {
+      throw err;
+    }
+    if (dbAppointment === null) {
+      res.send(404, { message: 'Appointment can not be found' });
+    } 
+    else {
+      dbAppointment.remove(function (err) {
+        if (err) {
+          res.send(400, err);
+          return;
+        }
+        res.send(200, { message: 'Appointment deleted' } );
+      })
+    }
+  });
 };
 

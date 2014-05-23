@@ -54,7 +54,7 @@ describe('User persistence tests (env: ' + process.env.NODE_ENV + ')', function(
       });
     });
 
-    it('can find a user by userId and provider', function (done) {
+    it('can find a user by provider userId and provider', function (done) {
       User.findByUserIdAndProvider('test user id', 'Test', function (err, dbUser) {
         should.not.exist(err);
         dbUser.userId.should.equal('test user id');
@@ -62,7 +62,7 @@ describe('User persistence tests (env: ' + process.env.NODE_ENV + ')', function(
       });
     });   
 
-    it('can find a user by id', function (done) {
+    it('can find a user by internal id', function (done) {
       User.findById(userId, function (err, dbUser) {
         should.not.exist(err);
         dbUser.id.should.equal(userId);
