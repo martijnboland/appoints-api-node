@@ -39,16 +39,16 @@ router.get('/auth/google/callback',
 router.post('/auth/google', auth.googletoken);
 
 // Appointments
-router.post('/appointments', middleware.ensureAuthenticated, appointments.create);
+router.route('/appointments')
+  .all(middleware.ensureAuthenticated)
+  .get(appointments.getByUser)
+  .post(appointments.create);
 
 router.route('/appointments/:id')
   .all(middleware.ensureAuthenticated)
   .get(appointments.getById)
   .put(appointments.update)
   .delete(appointments.delete);
-
-// My
-router.get('/my/apppointments', middleware.ensureAuthenticated, appointments.getByUserId);
 
 // --
 module.exports.router = router;

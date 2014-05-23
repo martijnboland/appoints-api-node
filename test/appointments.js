@@ -22,6 +22,7 @@ var testAppointment = {
   remarks: 'Same oil as last time?'
 }
 
+var user = null;
 var token = null;
 
 describe('Appointment tests', function () {
@@ -33,6 +34,7 @@ describe('Appointment tests', function () {
         if (err) {
           throw err;
         }
+        user = dbUser;
         token = security.createTokenForUser(dbUser, 10);
         done();
       });
@@ -46,6 +48,61 @@ describe('Appointment tests', function () {
       }
       done();
     });
+  });
+
+  describe('GET /appointments', function () {
+    
+    beforeEach(function (done) {      
+      var appointments = [{
+        title: 'Testappointment 1',
+        user: { 
+          id: user.id,
+          displayName: user.displayName
+        },
+        dateAndTime: new Date("June 13, 2014 16:00:00"),
+        duration: 30
+      }, {
+        title: 'Testappointment 2',
+        user: { 
+          id: user.id,
+          displayName: user.displayName
+        },
+        dateAndTime: new Date("July 11, 2014 11:45:00"),
+        duration: 30
+      }];
+
+      Appointment.create(appointments, function(err) {
+        if (err) {
+          throw err;
+        }
+        done();
+      })
+    });
+
+    it('returns a 401 when not authenticated', function (done) {
+      request(app)
+        .get('/appointments')
+        .expect(401)
+        .end(function (err, res) {
+          should.not.exist(err);
+          done();
+        });
+    });
+
+    it('returns a 200 with an list of appointments ordered by date and time in descending order.', function (done) {
+      request(app)
+        .get('/appointments')
+        .set('authorization', 'Bearer ' + token)
+        .expect(200)
+        .end(function (err, res) {
+          should.not.exist(err);
+          res.body.should.have.property('count', 2);
+          res.body._embedded.appointments.should.have.a.lengthOf(2);
+          res.body._embedded.appointments[0].title.should.equal('Testappointment 2');
+          done();
+        });
+    });
+
   });
 
   describe('POST /appointments', function () {
