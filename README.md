@@ -115,7 +115,7 @@ The response is the newly created appointment:
 {
 	"_links":{
 		"self": {"href":"/appointments/53838715fd51be21ee42b7d4"},
-		"user": {"href":"/users/537f6b9831a512abccd58a98","title":"A google users"}
+		"user": {"href":"/users/537f6b9831a512abccd58a98","title":"A google user"}
 	},
 	"id":"53838715fd51be21ee42b7d4",
 	"title":"Fresh haircut",
@@ -138,7 +138,7 @@ There is one appointment in stored in the database. The GET request for '/appoin
 				"self":{"href":"/appointments/53838715fd51be21ee42b7d4"},
 				"user": {
 					"href":"/users/537f6b9831a512abccd58a98",
-					"title":"Martijn Boland"
+					"title":"A google user"
 				}
 			},
 			"id":"53838715fd51be21ee42b7d4",
