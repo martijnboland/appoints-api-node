@@ -22,7 +22,7 @@ Getting started
 
 		npm install
 		
-5. Run the server:
+5. Run the server (default on http://localhost:3000/):
 
 		node index.js
 		
@@ -30,3 +30,30 @@ You can run the integration test suite with:
 
 		npm test (*nix, Mac OS X)
 		runtests.bat (Windows)
+
+Usage
+-------------
+When the server is running locally, you can try the api with a browser, curl or an API testing tool like [Postman](http://www.getpostman.com/). 
+
+Start with GET http://localhost:3000/. This results in:
+
+```json
+{
+	"message": "Appoints service API",
+	"details": "This is a REST api where you can schedule appointments for <insert business here>",
+	"_links": {
+		"self": {"href":"/"},
+		"me": {"href":"/me"},
+		"appointments" :{"href":"/appointments"}
+	}
+}
+```
+
+
+
+{
+  "title": "Get a haircut",
+  "dateAndTime": "2014-06-01T14:45:00.000Z",
+  "duration": 30,
+  "remarks": "Same as last time"
+}
