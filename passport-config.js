@@ -41,8 +41,8 @@ exports.configure = function () {
   ));
 
   passport.use(new GoogleStrategy({
-      clientID: config.settings.authProviders.google.consumerKey,
-      clientSecret: config.settings.authProviders.google.consumerSecret,
+      clientID: config.settings.authProviders.google.clientId,
+      clientSecret: config.settings.authProviders.google.clientSecret,
       callbackURL: config.settings.authProviders.google.callbackUrl
     },
     function(accessToken, refreshToken, profile, done) {

@@ -1,4 +1,4 @@
-// This is an example configuration file. Rename this file to development.js or test.js
+// This is an example configuration file. Rename this file to development.js
 // and set the values to get going.
 var settings = {
   db: {
@@ -6,13 +6,13 @@ var settings = {
   }, 
   authProviders: {
     facebook: { 
-      clientId: '', 
-      clientSecret: '', 
+      clientId: 'your client id here', 
+      clientSecret: 'your client secret here', 
       callbackUrl: 'http://localhost:3000/auth/facebook/callback' 
     },
     google: { 
-      consumerKey: '', 
-      consumerSecret: '', 
+      clientId: 'your client id here', 
+      clientSecret: 'your client secret here', 
       callbackUrl: 'http://localhost:3000/auth/google/callback' 
     }
   },
