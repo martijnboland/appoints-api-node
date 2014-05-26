@@ -8,10 +8,11 @@ Features
 - Create, view, update and delete appointments
 - Authentication with 3rd party providers (Facebook & Google)
 - Hypermedia API (HAL, see http://stateless.co/hal_specification.html)
+- Full integration test suite
 
 Getting started
 ---------------
-1. Make sure to have [node.js](http://nodejs.org/) installed on your machine
+1. [Node.js](http://nodejs.org/) needs to be installed on your machine
 2. Make sure you have access to a [MongoDB](http://www.mongodb.org/) instance, either on your local machine or somewhere in the cloud. The test suite is configured by default to use a local database with the name 'appointstest'
 3. Clone the repository:
 
@@ -25,10 +26,7 @@ Getting started
 
 		node index.js
 		
-You can run the tests with:
+You can run the integration test suite with:
 
-		npm test
-		
-or when you are on Windows:
-
-		runtests.bat
+		npm test (*nix, Mac OS X)
+		runtests.bat (Windows)
