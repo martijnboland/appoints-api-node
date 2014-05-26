@@ -40,7 +40,7 @@ exports.ensureAuthenticated =  function (req, res, next) {
     }
   } 
   else {
-    notAuthenticated('No Authorization header was found');
+    notAuthenticated('No Authorization header was found. Format is Authorization: Bearer [token]');
   }
 
   jwt.verify(token, config.settings.tokenSecret, null, function(err, decoded) {
