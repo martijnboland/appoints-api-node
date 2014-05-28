@@ -89,7 +89,7 @@ describe('Authentication tests', function () {
         .expect(401)
         .end(function (err, res) {
           should.not.exist(err);
-          res.body.details.should.equal('No Authorization header was found');
+          res.body.details.should.equal('No Authorization header was found. Format is Authorization: Bearer [token]');
           done();
         })    
     });
