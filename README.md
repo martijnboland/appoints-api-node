@@ -97,8 +97,8 @@ which returns:
 }
 ```
 
-Looking good! Where can we go next? We still have one link left to try: '/appointments'. Here we can manage our appointments (create, view, update and delete). 
-Let's create a new appointment by POSTing (create a new resource) to '/appointments' (with the authorization header set properly). The data for our appointment is:
+Looking good! Where can we go next? We still have one link left to try: '/appointments'. Here we can manage our appointments (create, view, update and delete with the standard GET, POST, PUT, PATCH and DELETE HTTP verbs). 
+Let's create a new appointment by POSTing to '/appointments' (with the authorization header set properly). The data for our appointment is:
 
 ```json
 {
@@ -125,7 +125,7 @@ The response is the newly created appointment:
 }
 ```
 
-There is one appointment in stored in the database. The GET request for '/appointments' returns all our appointments:
+We now have one appointment stored in the database. The GET request for '/appointments' returns all our appointments:
 
 ```json
 {
@@ -152,3 +152,11 @@ There is one appointment in stored in the database. The GET request for '/appoin
 }
 ```
 
+Existing appointments can be modified or deleted at '/appointments/:id' with the PUT, PATCH and DELETE verbs. Let's say we want to reschedule the appointment. This can be done by sending a PATCH request to '/appointments/53838715fd51be21ee42b7d4' with the new date and time:
+
+```json
+{
+  "dateAndTime": "2014-06-01T17:15:00.000Z",
+  "remarks": "Same as last time (rescheduled from 14:45 to 17:15)"
+}
+```
