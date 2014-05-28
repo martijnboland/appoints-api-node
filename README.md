@@ -35,6 +35,8 @@ Usage
 -----
 When the server is running locally, you can try the api with a browser, curl or an API testing tool like [Postman](http://www.getpostman.com/). 
 
+The default response content type is application/hal+json. It's also possible to request application/json by adding the Accept: application/json header to the request. POST, PUT and PATCH requests need to have their content-type set to application/json.
+
 Start with GET http://localhost:3000/:
 
 ```json
