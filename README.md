@@ -1,12 +1,12 @@
 Appoints-Api
 ============
 
-Appoints-Api is an example appointment scheduler REST API built with Node.js, Express 4 and Mongodb.
+Appoints-Api is a simple example appointment scheduler REST API built with Node.js, Express 4 and Mongodb.
 
 Features
 --------
 - Create, view, update and delete appointments
-- Authentication with 3rd party providers (Facebook & Google)
+- Token-based authentication with 3rd party providers (Facebook & Google)
 - Hypermedia API (HAL, see http://stateless.co/hal_specification.html)
 - Full integration test suite
 
@@ -32,7 +32,7 @@ You can run the integration test suite with:
 		runtests.bat (Windows)
 
 Usage
--------------
+-----
 When the server is running locally, you can try the api with a browser, curl or an API testing tool like [Postman](http://www.getpostman.com/). 
 
 Start with GET http://localhost:3000/:
@@ -109,13 +109,16 @@ Let's create a new appointment by POSTing to '/appointments' (with the authoriza
 }
 ```
 
-The response is the newly created appointment:
+The response has HTTP status code 201 (created) and the body contains the newly created appointment:
 
 ```json
 {
 	"_links":{
 		"self": {"href":"/appointments/53838715fd51be21ee42b7d4"},
-		"user": {"href":"/users/537f6b9831a512abccd58a98","title":"A google user"}
+		"user": {
+			"href":"/users/537f6b9831a512abccd58a98",
+			"title":"A google user"
+		}
 	},
 	"id":"53838715fd51be21ee42b7d4",
 	"title":"Fresh haircut",
@@ -135,7 +138,7 @@ We now have one appointment stored in the database. The GET request for '/appoin
 	"_embedded": {
 		"appointments":[{
 			"_links": {
-				"self":{"href":"/appointments/53838715fd51be21ee42b7d4"},
+				"self": {"href":"/appointments/53838715fd51be21ee42b7d4"},
 				"user": {
 					"href":"/users/537f6b9831a512abccd58a98",
 					"title":"A google user"
@@ -160,3 +163,26 @@ Existing appointments can be modified or deleted at '/appointments/:id' with the
   "remarks": "Same as last time (rescheduled from 14:45 to 17:15)"
 }
 ```
+
+This returns the modified resource as response with HTTP status code 200:
+
+```json
+{
+	"_links":{
+		"self":{"href":"/appointments/53838715fd51be21ee42b7d4"},
+		"user":{
+			"href":"/users/537f6b9831a512abccd58a98",
+			"title":"A google user"
+		}
+	},
+	"id":"53838715fd51be21ee42b7d4",
+	"title":"Fresh haircut",
+	"dateAndTime":"2014-06-01T17:15:00.000Z",
+	"duration":30,
+	"remarks":"Same as last time (rescheduled from 14:45 to 17:15)"
+}
+```
+
+Security warning
+----------------
+The authorization header contains sensitive information. Always use SSL when deploying an API like this in a production environment.
