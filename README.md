@@ -33,7 +33,7 @@ You can run the integration test suite with:
 
 Usage
 -----
-When the server is running locally, you can try the api with a browser, curl or an API testing tool like [Postman](http://www.getpostman.com/). 
+When the server is running locally, you can try the api with a browser, curl or an API testing tool like [Postman](http://www.getpostman.com/). If you don't have a local server running, you can try the API at https://appoints-api.azurewebsites.net/ instead of http://localhost:3000/.
 
 The default response content type is application/hal+json. It's also possible to request application/json by adding the Accept: application/json header to the request. POST, PUT and PATCH requests need to have their content-type set to application/json.
 
