@@ -1,4 +1,4 @@
-module.exports = function(req, res) {
+module.exports = function (req, res) {
   var user = req.user;
   var result = {
     _links: {

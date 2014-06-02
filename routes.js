@@ -28,15 +28,17 @@ router.get('/auth/facebook/callback',
 router.post('/auth/facebook', auth.facebooktoken);
 
 router.get('/auth/google', 
-  passport.authenticate('google', { scope: ['openid', 'profile', 'email'] })
+  passport.authenticate('google', { scope: ['openid', 'email'] })
 );
 
 router.get('/auth/google/callback', 
-  passport.authenticate('google', { scope: ['openid', 'profile', 'email'] }),
+  passport.authenticate('google', { scope: ['openid', 'email'] }),
   auth.loggedin
 );
 
 router.post('/auth/google', auth.googletoken);
+
+router.get('/auth/success', auth.success);
 
 // Appointments
 router.route('/appointments')

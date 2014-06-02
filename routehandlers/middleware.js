@@ -4,7 +4,7 @@ var User = require('../models/user');
 
 exports.ensureAuthenticated =  function (req, res, next) {
 
-  function notAuthenticated(details) {
+  function notAuthenticated (details) {
     res.send('401', { 
       message: 'Access to ' + req.path + ' is not allowed.',
       details: details,
