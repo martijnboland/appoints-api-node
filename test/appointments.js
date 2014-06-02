@@ -85,6 +85,7 @@ describe('Appointment tests', function () {
     it('returns a 200 with an list of appointments ordered by date and time in descending order.', function (done) {
       request(app)
         .get('/appointments')
+        .set('Accept', 'application/json')
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .end(function (err, res) {
@@ -121,6 +122,7 @@ describe('Appointment tests', function () {
     it('returns a 201 with location header set when a proper appointment is sent', function (done) {
       request(app)
         .post('/appointments')
+        .set('Accept', 'application/json')
         .set('authorization', 'Bearer ' + token)
         .send(testAppointment)
         .expect(201)
@@ -216,6 +218,7 @@ describe('Appointment tests', function () {
       existingAppointment.dateAndTime = '2014-07-28T16:15:00.000Z'; // ISO date because this is the value we're going to PUT
       request(app)
         .put('/appointments/' + existingAppointment.id)
+        .set('Accept', 'application/json')
         .set('authorization', 'Bearer ' + token)
         .send(existingAppointment)
         .expect(200)
@@ -292,6 +295,7 @@ describe('Appointment tests', function () {
     it('returns a 200 response with the updated appointment', function (done) {
       request(app)
         .patch('/appointments/' + existingAppointmentId)
+        .set('Accept', 'application/json')
         .set('authorization', 'Bearer ' + token)
         .send({ dateAndTime: newAppointmentDate })
         .expect(200)
@@ -353,6 +357,7 @@ describe('Appointment tests', function () {
     it('returns a 200 response with a confirmation message when successful', function (done) {
       request(app)
         .delete('/appointments/' + existingAppointmentId)
+        .set('Accept', 'application/json')
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .end(function (err, res) {

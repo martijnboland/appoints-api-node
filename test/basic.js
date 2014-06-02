@@ -9,6 +9,7 @@ describe('Basic route tests', function () {
     it('returns a json response with message, details and a links collection', function (done) {
       request(app)
         .get('/')
+        .set('Accept', 'application/json')
         .expect(200)
         .expect('Content-Type', /json/)
         .end(function (err, res) {
@@ -27,6 +28,7 @@ describe('Basic route tests', function () {
     it('returns a 401 response with message, details and a links collection ', function (done) {
       request(app)
         .get('/me')
+        .set('Accept', 'application/json')
         .expect(401)
         .end(function (err, res) {
           should.not.exist(err);
