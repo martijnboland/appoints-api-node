@@ -4,11 +4,6 @@ var security = require('../infrastructure/security');
 
 var tokenExpiresInMinutes = 60;
 
-function redirectToSuccessfulLogin (user, res) {
-  var token = security.createTokenForUser(user, tokenExpiresInMinutes);
-  res.redirect('/auth/success?token=' + token);
-}
-
 function sendLoggedInResponseForUser (user, res) {
   res.send({
     message: 'Authentication successful',
@@ -38,8 +33,16 @@ function createUserFromProfile (profile) {
 }
 
 exports.loggedin = function (req, res) {
-  //sendLoggedInResponseForUser(req.user, res);
-  redirectToSuccessfulLogin(req.user, res);
+  // A very hacky way to get the auth token to the JS client after the oauth redirect flow.
+  var token = security.createTokenForUser(req.user, tokenExpiresInMinutes)
+  var response = 
+  '<html><head>' +
+  '<script>' +
+  'if (window.opener) { window.opener.postMessage("' + token + '", "*"); } else { window.location.hash = "token=' + token + '" }' +
+  '</script>' +
+  '</head><body></body></html>';
+  res.set('Content-Type', 'text/html');
+  res.send(response);
 }
 
 exports.facebooktoken = function (req, res) {
@@ -64,16 +67,4 @@ exports.googletoken = function (req, res) {
     var user = createUserFromProfile(profile);
     sendLoggedInResponseForUser(user, res);
   });
-}
-
-exports.success = function (req, res) {
-  var token = req.query.token;
-  var response = 
-  '<html><head>' +
-  '<script>' +
-  'window.opener.postMessage("' + token + '", "*");' +
-  '</script>' +
-  '</head><body>Authenticated</body></html>';
-  res.set('Content-Type', 'text/html');
-  res.send(response);
 }

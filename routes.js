@@ -38,8 +38,6 @@ router.get('/auth/google/callback',
 
 router.post('/auth/google', auth.googletoken);
 
-router.get('/auth/success', auth.success);
-
 // Appointments
 router.route('/appointments')
   .all(middleware.ensureAuthenticated)
