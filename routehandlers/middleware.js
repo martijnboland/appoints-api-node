@@ -48,7 +48,7 @@ exports.ensureAuthenticated =  function (req, res, next) {
       notAuthenticated('Invalid or expired token');
     }
     else {
-      User.findById(decoded.id, function (err, dbUser) {
+      User.findById(decoded.sub, function (err, dbUser) {
         if (err || (! dbUser)) {
           notAuthenticated('Valid token, but we could not find a corresponding user in our database.');
         }
