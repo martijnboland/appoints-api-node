@@ -32,13 +32,18 @@ function createUserFromProfile (profile) {
   };
 }
 
+exports.externalcallback = function (req, res) {
+  var token = security.createTokenForUser(req.user, tokenExpiresInMinutes)
+  res.redirect('/auth/loggedin/#access_token=' + token);
+}
+
 exports.loggedin = function (req, res) {
   // A very hacky way to get the auth token to the JS client after the oauth redirect flow.
-  var token = security.createTokenForUser(req.user, tokenExpiresInMinutes)
+  // This is for cases where the client has no access to the hash with the token.
   var response = 
   '<html><head>' +
   '<script>' +
-  'if (window.opener) { window.opener.postMessage("' + token + '", "*"); } else { window.location.hash = "token=' + token + '" }' +
+  'if (window.opener) { window.opener.postMessage(window.location.hash, "*"); } ' +
   '</script>' +
   '</head><body></body></html>';
   res.set('Content-Type', 'text/html');

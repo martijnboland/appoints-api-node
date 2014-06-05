@@ -22,7 +22,7 @@ router.get('/auth/facebook',
 
 router.get('/auth/facebook/callback', 
   passport.authenticate('facebook', { scope: 'email' }),
-  auth.loggedin
+  auth.externalcallback
 );
 
 router.post('/auth/facebook', auth.facebooktoken);
@@ -33,10 +33,12 @@ router.get('/auth/google',
 
 router.get('/auth/google/callback', 
   passport.authenticate('google', { scope: ['openid', 'email'] }),
-  auth.loggedin
+  auth.externalcallback
 );
 
 router.post('/auth/google', auth.googletoken);
+
+router.get('/auth/loggedin', auth.loggedin);
 
 // Appointments
 router.route('/appointments')
