@@ -3,9 +3,9 @@ var config = require('../config');
 
 exports.createTokenForUser = function (user, expiresInMinutes) {
   var payload = {
-    sub: user.id,
     roles: user.roles
   };
-  var token = jwt.sign(payload, config.settings.tokenSecret, { expiresInMinutes: expiresInMinutes });
+  // TODO: we need to dynamically set issuer and audience
+  var token = jwt.sign(payload, config.settings.tokenSecret, { subject: user.id, expiresInMinutes: expiresInMinutes });
   return token;
 }

@@ -43,10 +43,9 @@ exports.loggedin = function (req, res) {
   var response = 
   '<html><head>' +
   '<script>' +
-  'if (window.opener) { window.opener.postMessage(window.location.hash, "*"); } ' +
+  'if (window.opener) { window.opener.postMessage(window.location.hash.replace("#access_token=", ""), "*"); } ' +
   '</script>' +
   '</head><body></body></html>';
-  res.set('Content-Type', 'text/html');
   res.send(response);
 }
 
