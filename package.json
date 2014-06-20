@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "body-parser": "~1.0.x",
+    "cors": "^2.3.1",
     "express": "~4.x",
     "jsonwebtoken": "^0.4.0",
     "leisure": "^0.1.0",

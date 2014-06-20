@@ -1,7 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var leisure = require('leisure');
+var cors = require('cors');
 var passport = require('passport');
+var config = require('./config');
 var passportConfig = require('./passport-config');
 
 var mediaTypes = [
@@ -13,6 +15,7 @@ var mediaTypes = [
 passportConfig.configure();
 
 var app = express();
+app.use(cors(config.settings.cors));
 app.use(bodyParser());
 app.use(leisure.accept(mediaTypes));
 app.use(passport.initialize());
