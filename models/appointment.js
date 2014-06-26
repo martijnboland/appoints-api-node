@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var AppointmentSchema = new Schema({
-  title: { type: String, required: true },
+  title: { type: String, required: 'Appointment description is required' },
   user: {
     id: { type: String, required: true },
     displayName: String
