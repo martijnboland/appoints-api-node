@@ -25,10 +25,13 @@ AppointmentSchema.virtual('duration')
 
 AppointmentSchema.path('dateAndTime').validate(function (value, done) {
   var self = this;
-  return mongoose.models.Appointment.find( { $or: [ 
-    { dateAndTime: { $lt: self.endDateAndTime, $gte: self.dateAndTime } }, 
-    { endDateAndTime: { $lte: self.endDateAndTime, $gt: self.dateAndTime } }
-  ] }, function (err, appointments) {
+  return mongoose.models.Appointment.find( { 
+    'user.id': self.user.id, 
+    $or: [ 
+      { dateAndTime: { $lt: self.endDateAndTime, $gte: self.dateAndTime } }, 
+      { endDateAndTime: { $lte: self.endDateAndTime, $gt: self.dateAndTime } }
+    ] 
+  }, function (err, appointments) {
     done(! appointments || appointments.length === 0);
   });
 }, "The appointment overlaps with other appointments");

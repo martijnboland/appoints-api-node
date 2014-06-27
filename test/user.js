@@ -81,7 +81,7 @@ describe('User persistence tests (env: ' + process.env.NODE_ENV + ')', function(
       });
     });
 
-    it('can find a user by userId and provider and udpate the tokens', function (done) {
+    it('can find a user by userId and provider and update the tokens', function (done) {
       User.findByUserIdAndProvider('test user id', 'Test', function (err, dbUser) {
         should.not.exist(err);
         dbUser.providerAccessToken = '1234567890';
