@@ -106,6 +106,7 @@ Let's create a new appointment by POSTing to '/appointments' (with the authoriza
 {
   "title": "Fresh haircut",
   "dateAndTime": "2014-06-01T14:45:00.000Z",
+  "endDateAndTime": "2014-06-01T15:15:00.000Z",
   "duration": 30,
   "remarks": "Same as last time"
 }
@@ -125,6 +126,7 @@ The response has HTTP status code 201 (created) and the body contains the newly 
 	"id":"53838715fd51be21ee42b7d4",
 	"title":"Fresh haircut",
 	"dateAndTime":"2014-06-01T14:45:00.000Z",
+	"endDateAndTime": "2014-06-01T15:15:00.000Z",
 	"duration":30,
 	"remarks":"Same as last time"
 }
@@ -149,6 +151,7 @@ We now have one appointment stored in the database. The GET request for '/appoin
 			"id":"53838715fd51be21ee42b7d4",
 			"title":"Fresh haircut",
 			"dateAndTime":"2014-06-01T14:45:00.000Z",
+			"endDateAndTime": "2014-06-01T15:15:00.000Z",
 			"duration":30,
 			"remarks":"Same as last time"
 		}]
@@ -162,6 +165,7 @@ Existing appointments can be modified or deleted at '/appointments/:id' with the
 ```json
 {
   "dateAndTime": "2014-06-01T17:15:00.000Z",
+  "endDateAndTime": "2014-06-01T17:45:00.000Z",
   "remarks": "Same as last time (rescheduled from 14:45 to 17:15)"
 }
 ```
@@ -180,6 +184,7 @@ This returns the modified resource as response with HTTP status code 200:
 	"id":"53838715fd51be21ee42b7d4",
 	"title":"Fresh haircut",
 	"dateAndTime":"2014-06-01T17:15:00.000Z",
+	"endDateAndTime": "2014-06-01T17:45:00.000Z",
 	"duration":30,
 	"remarks":"Same as last time (rescheduled from 14:45 to 17:15)"
 }

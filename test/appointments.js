@@ -1,3 +1,4 @@
+/*jshint expr: true*/
 /* global describe, it, before, beforeEach, after, afterEach */
 var should = require('should');
 var request = require('supertest');
@@ -53,7 +54,7 @@ describe('Appointment tests', function () {
           displayName: user.displayName
         },
         dateAndTime: new Date("June 13, 2014 16:00:00"),
-        duration: 30
+        endDateAndTime: new Date("June 13, 2014 16:30:00")
       }, {
         title: 'Testappointment 2',
         user: { 
@@ -61,7 +62,7 @@ describe('Appointment tests', function () {
           displayName: user.displayName
         },
         dateAndTime: new Date("July 11, 2014 11:45:00"),
-        duration: 30
+        endDateAndTime: new Date("June 13, 2014 12:15:00")
       }];
 
       Appointment.create(appointments, function(err) {
@@ -104,7 +105,7 @@ describe('Appointment tests', function () {
     var testAppointment = {
       title: 'Regular full massage',
       dateAndTime: '2014-06-13T16:00:00.000Z',
-      duration: 60,
+      endDateAndTime: '2014-06-13T17:00:00.000Z',
       remarks: 'I\'d like the same oil as last time.'
     }
 
@@ -160,7 +161,7 @@ describe('Appointment tests', function () {
           displayName: user.displayName
         },
         dateAndTime: new Date("June 13, 2014 16:00:00"),
-        duration: 30
+        endDateAndTime: new Date("June 13, 2014 16:30:00")
       };
 
       Appointment.create(appointment, function(err, dbAppointment) {
@@ -171,6 +172,7 @@ describe('Appointment tests', function () {
           id: dbAppointment.id,
           title: dbAppointment.title,
           dateAndTime: dbAppointment.dateAndTime,
+          endDateAndTime: dbAppointment.endDateAndTime,
           duration: dbAppointment.duration,
           remarks: dbAppointment.remarks
         }
@@ -235,6 +237,7 @@ describe('Appointment tests', function () {
   describe('PATCH /appointments/:id', function () {
     var existingAppointmentId = null;
     var newAppointmentDate = '2014-08-09T13:45:00.000Z';
+    var newAppointmentEndDate = '2014-08-09T14:15:00.000Z';
 
     beforeEach(function (done) {
       // Create one appointment in the database that is to be updated. 
@@ -245,7 +248,7 @@ describe('Appointment tests', function () {
           displayName: user.displayName
         },
         dateAndTime: new Date("June 13, 2014 16:00:00"),
-        duration: 30
+        endDateAndTime: new Date("June 13, 2014 16:30:00")
       };
 
       Appointment.create(appointment, function(err, dbAppointment) {
@@ -260,7 +263,7 @@ describe('Appointment tests', function () {
     it('returns a 401 response when not authenticated', function (done) {
       request(app)
         .patch('/appointments/' + existingAppointmentId)
-        .send({ dateAndTime: newAppointmentDate })
+        .send({ dateAndTime: newAppointmentDate }, { endDateAndTime: newAppointmentEndDate })
         .expect(401)
         .end(function (err, res) {
           should.not.exist(err);
@@ -272,7 +275,7 @@ describe('Appointment tests', function () {
       request(app)
         .patch('/appointments/537e0a6795e2ee32ab736b1a') // bogus identifier
         .set('authorization', 'Bearer ' + token)
-        .send({ dateAndTime: newAppointmentDate })
+        .send({ dateAndTime: newAppointmentDate }, { endDateAndTime: newAppointmentEndDate })
         .expect(404)
         .end(function (err, res) {
           should.not.exist(err);
@@ -297,12 +300,14 @@ describe('Appointment tests', function () {
         .patch('/appointments/' + existingAppointmentId)
         .set('Accept', 'application/json')
         .set('authorization', 'Bearer ' + token)
-        .send({ dateAndTime: newAppointmentDate })
+        .send({ dateAndTime: newAppointmentDate, endDateAndTime: newAppointmentEndDate })
         .expect(200)
         .end(function (err, res) {
           should.not.exist(err);
           res.body.title.should.equal('Testappointment 1');
           res.body.dateAndTime.should.equal('2014-08-09T13:45:00.000Z');
+          res.body.endDateAndTime.should.equal('2014-08-09T14:15:00.000Z');
+          res.body.duration.should.equal(30);
           done();
         });
     });
@@ -321,7 +326,7 @@ describe('Appointment tests', function () {
           displayName: user.displayName
         },
         dateAndTime: new Date("June 13, 2014 16:00:00"),
-        duration: 30
+        endDateAndTime: new Date("June 13, 2014 16:30:00")
       };
 
       Appointment.create(appointment, function(err, dbAppointment) {

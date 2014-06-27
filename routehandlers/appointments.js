@@ -9,6 +9,7 @@ function mapAppointment(dbAppointment) {
     id: dbAppointment.id,
     title: dbAppointment.title,
     dateAndTime: dbAppointment.dateAndTime,
+    endDateAndTime: dbAppointment.endDateAndTime,
     duration: dbAppointment.duration,
     remarks: dbAppointment.remarks
   };
