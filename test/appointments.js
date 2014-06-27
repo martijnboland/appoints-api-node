@@ -312,6 +312,21 @@ describe('Appointment tests', function () {
         });
     });
 
+    it('returns a 200 response with the updated and sanitized appointment', function (done) {
+      request(app)
+        .patch('/appointments/' + existingAppointmentId)
+        .set('Accept', 'application/json')
+        .set('authorization', 'Bearer ' + token)
+        .send({ remarks: '<script>alert("p0wned");</script> content that should not be cleaned' })
+        .expect(200)
+        .end(function (err, res) {
+          should.not.exist(err);
+          res.body.title.should.equal('Testappointment 1');
+          res.body.remarks.should.equal(' content that should not be cleaned');
+          done();
+        });
+    });
+
   });
 
   describe('DELETE /appointments/:id', function () {

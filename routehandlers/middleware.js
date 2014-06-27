@@ -1,6 +1,7 @@
 var jwt = require('jsonwebtoken');
 var config = require('../config');
 var User = require('../models/user');
+var sanitizer = require('sanitizer');
 
 exports.ensureAuthenticated =  function (req, res, next) {
 
@@ -60,4 +61,15 @@ exports.ensureAuthenticated =  function (req, res, next) {
     }
   });
   
+};
+
+exports.sanitizeRequestBody = function (req, res, next) {
+  if (req.body) {
+    for (var prop in req.body) {
+      if (typeof req.body[prop] === 'string') {
+        req.body[prop] = sanitizer.sanitize(req.body[prop]);
+      }
+    }
+  }
+  next();
 };

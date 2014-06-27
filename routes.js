@@ -44,13 +44,13 @@ router.get('/auth/loggedin', auth.loggedin);
 router.route('/appointments')
   .all(middleware.ensureAuthenticated)
   .get(appointments.getByUser)
-  .post(appointments.create);
+  .post(middleware.sanitizeRequestBody, appointments.create);
 
 router.route('/appointments/:id')
   .all(middleware.ensureAuthenticated)
   .get(appointments.getById)
-  .put(appointments.update)
-  .patch(appointments.update)
+  .put(middleware.sanitizeRequestBody, appointments.update)
+  .patch(middleware.sanitizeRequestBody, appointments.update)
   .delete(appointments.delete);
 
 // --

@@ -26,7 +26,8 @@ AppointmentSchema.virtual('duration')
 AppointmentSchema.path('dateAndTime').validate(function (value, done) {
   var self = this;
   return mongoose.models.Appointment.find( { 
-    'user.id': self.user.id, 
+    '_id': { $ne: self._id },
+    'user.id': self.user.id,
     $or: [ 
       { dateAndTime: { $lt: self.endDateAndTime, $gte: self.dateAndTime } }, 
       { endDateAndTime: { $lte: self.endDateAndTime, $gt: self.dateAndTime } }
