@@ -8,6 +8,7 @@ var User = require('../models/user');
 var Appointment = require('../models/appointment');
 var config = require('../config');
 var security = require('../infrastructure/security');
+var moment = require('moment');
 
 var testUserData = {
   userId: '1234567890',
@@ -18,6 +19,7 @@ var testUserData = {
 
 var user = null;
 var token = null;
+var dateBaseline = moment().startOf('day'); // Date baseline for tests = today, 0:00
 
 describe('Appointment tests', function () {
 
@@ -53,16 +55,16 @@ describe('Appointment tests', function () {
           id: user.id,
           displayName: user.displayName
         },
-        dateAndTime: new Date("June 13, 2014 16:00:00"),
-        endDateAndTime: new Date("June 13, 2014 16:30:00")
+        dateAndTime: dateBaseline.clone().add('days', 1).add('hours', 16).toDate(),
+        endDateAndTime: dateBaseline.clone().add('days', 1).add('hours', 16).add('minutes', 30).toDate()
       }, {
         title: 'Testappointment 2',
         user: { 
           id: user.id,
           displayName: user.displayName
         },
-        dateAndTime: new Date("July 11, 2014 11:45:00"),
-        endDateAndTime: new Date("June 13, 2014 12:15:00")
+        dateAndTime: dateBaseline.clone().add('days', 3).add('hours', 9).toDate(),
+        endDateAndTime: dateBaseline.clone().add('days', 3).add('hours', 9).add('minutes', 45).toDate()
       }];
 
       Appointment.create(appointments, function(err) {
@@ -104,8 +106,8 @@ describe('Appointment tests', function () {
 
     var testAppointment = {
       title: 'Regular full massage',
-      dateAndTime: '2014-06-13T16:00:00.000Z',
-      endDateAndTime: '2014-06-13T17:00:00.000Z',
+      dateAndTime: dateBaseline.clone().add('days', 1).add('hours', 16).toISOString(),
+      endDateAndTime: dateBaseline.clone().add('days', 1).add('hours', 17).toISOString(),
       remarks: 'I\'d like the same oil as last time.'
     }
 
@@ -147,6 +149,20 @@ describe('Appointment tests', function () {
         });
     });
 
+    it('returns a 422 when an appointment with past date is sent', function (done) {
+      testAppointment.dateAndTime = dateBaseline.clone().add('days', -1).toISOString();
+      request(app)
+        .post('/appointments')
+        .set('Accept', 'application/json')
+        .set('authorization', 'Bearer ' + token)
+        .send(testAppointment)
+        .expect(422)
+        .end(function (err, res) {
+          should.not.exist(err);
+          done();
+        });
+    });
+
   });
 
   describe('PUT /appointments/:id', function () {
@@ -160,9 +176,9 @@ describe('Appointment tests', function () {
           id: user.id,
           displayName: user.displayName
         },
-        dateAndTime: new Date("June 13, 2014 16:00:00"),
-        endDateAndTime: new Date("June 13, 2014 16:30:00")
-      };
+        dateAndTime: dateBaseline.clone().add('hours', 16).toDate(),
+        endDateAndTime: dateBaseline.clone().add('hours', 16).add('minutes', 30).toDate()
+      }
 
       Appointment.create(appointment, function(err, dbAppointment) {
         if (err) {
@@ -217,7 +233,8 @@ describe('Appointment tests', function () {
     });
 
     it('returns a 200 response with the updated appointment', function (done) {
-      existingAppointment.dateAndTime = '2014-07-28T16:15:00.000Z'; // ISO date because this is the value we're going to PUT
+      var newDateAndTime = dateBaseline.clone().add('days', 1).add('hours', 15).add('minutes', 15).toISOString(); // ISO date because this is the value we're going to PUT
+      existingAppointment.dateAndTime =  newDateAndTime 
       request(app)
         .put('/appointments/' + existingAppointment.id)
         .set('Accept', 'application/json')
@@ -227,7 +244,7 @@ describe('Appointment tests', function () {
         .end(function (err, res) {
           should.not.exist(err);
           res.body.title.should.equal('Testappointment 1');
-          res.body.dateAndTime.should.equal('2014-07-28T16:15:00.000Z');
+          res.body.dateAndTime.should.equal(newDateAndTime);
           done();
         });
     });
@@ -236,8 +253,8 @@ describe('Appointment tests', function () {
 
   describe('PATCH /appointments/:id', function () {
     var existingAppointmentId = null;
-    var newAppointmentDate = '2014-08-09T13:45:00.000Z';
-    var newAppointmentEndDate = '2014-08-09T14:15:00.000Z';
+    var newAppointmentDate = dateBaseline.clone().add('days', 1).add('hours', 13).add('minutes', 45).toISOString();
+    var newAppointmentEndDate = dateBaseline.clone().add('days', 1).add('hours', 14).add('minutes', 15).toISOString();
 
     beforeEach(function (done) {
       // Create one appointment in the database that is to be updated. 
@@ -247,8 +264,8 @@ describe('Appointment tests', function () {
           id: user.id,
           displayName: user.displayName
         },
-        dateAndTime: new Date("June 13, 2014 16:00:00"),
-        endDateAndTime: new Date("June 13, 2014 16:30:00")
+        dateAndTime: dateBaseline.clone().add('hours', 15).add('minutes', 15).toDate(),
+        endDateAndTime: dateBaseline.clone().add('hours', 15).add('minutes', 45).toDate()
       };
 
       Appointment.create(appointment, function(err, dbAppointment) {
@@ -305,8 +322,8 @@ describe('Appointment tests', function () {
         .end(function (err, res) {
           should.not.exist(err);
           res.body.title.should.equal('Testappointment 1');
-          res.body.dateAndTime.should.equal('2014-08-09T13:45:00.000Z');
-          res.body.endDateAndTime.should.equal('2014-08-09T14:15:00.000Z');
+          res.body.dateAndTime.should.equal(newAppointmentDate);
+          res.body.endDateAndTime.should.equal(newAppointmentEndDate);
           res.body.duration.should.equal(30);
           done();
         });
@@ -340,8 +357,8 @@ describe('Appointment tests', function () {
           id: user.id,
           displayName: user.displayName
         },
-        dateAndTime: new Date("June 13, 2014 16:00:00"),
-        endDateAndTime: new Date("June 13, 2014 16:30:00")
+        dateAndTime: dateBaseline.clone().add('hours', 15).add('minutes', 15).toDate(),
+        endDateAndTime: dateBaseline.clone().add('hours', 15).add('minutes', 45).toDate()
       };
 
       Appointment.create(appointment, function(err, dbAppointment) {

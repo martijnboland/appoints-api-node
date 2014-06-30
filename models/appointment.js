@@ -37,4 +37,13 @@ AppointmentSchema.path('dateAndTime').validate(function (value, done) {
   });
 }, "The appointment overlaps with other appointments");
 
+AppointmentSchema.path('dateAndTime').validate(function (value, done) {
+  var isValid = true;
+  if (value < new Date()) {
+    isValid = false;
+  }
+  done(isValid);
+}, "The appointment can not be scheduled in the past");
+
+
 module.exports = mongoose.model('Appointment', AppointmentSchema);
