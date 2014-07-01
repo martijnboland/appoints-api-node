@@ -66,14 +66,14 @@ Following the links, you can see 2 other resources: ```/me``` and ```/appointmen
 
 Alright, so we're not supposed to view the resource unauthenticated and we need to supply an authorization token. How can we get a token? Perhaps follow one of the links? We're going to try the Google route: ```http://localhost:3000/auth/google```. At this point there are two options: 
 
-1. Do a GET request that will redirect to the Google authentication/authorization page that redirects back to our API after successful authorization. After this, we generate our own JWT token and redirect again with the access_token in the hash: ```http://localhost/auth/loggedin#access_token=eyJ0eXAiOiJK...```. From here, things are unfortunately a bit hacky because this is the only place where the API doesn't return a nice JSON response but HTML with a script that posts the access_token back to the opener window:
+1. Do a GET request to ```http://localhost:3000/auth/google``` that will redirect to the Google authentication/authorization page that redirects back to our API after successful authorization. After this, we generate our own JWT token and redirect again with the access_token in the hash: ```http://localhost/auth/loggedin#access_token=eyJ0eXAiOiJK...```. From here, things are unfortunately a bit hacky because this is the only place where the API doesn't return a nice JSON response but HTML with a script that posts the access_token back to the opener window:
 
     ```
     if (window.opener) { window.opener.postMessage(window.location.hash.replace("#access_token=", ""), "*"); }
     ```
 This to facilitate browser clients from other domains that use a popup browser window for the authentication flow but can not access the access_token hash due to cross-domain restrictions. With postMessage() it's possible to send values between browser windows and different domains. 
 
-2. Do a POST request to the same url with an already obtained token via some client API. This generates the authorization token:
+2. Do a POST request to ```http://localhost:3000/auth/google``` with an already obtained token via some client API. This generates our authorization token:
 
     ```json
     {
@@ -87,7 +87,7 @@ This to facilitate browser clients from other domains that use a popup browser w
     }
     ```
 
-If things went alright, we now have the authorization token. We try the ```/me``` link again but now with the authorization header HTTP HEADER set: 
+If things went alright, we now have the authorization token. Try the ```/me``` link again but now with the authorization header HTTP HEADER set: 
 
 ```
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjUzN2Y2Yjk4MzFhNTEyYWJjY2Q1OGE5OCIsImVtYWlsIjoibWFydGlqbmJvbGFuZEBnbWFpbC5jb20iLCJkaXNwbGF5TmFtZSI6Ik1hcnRpam4gQm9sYW5kIiwicm9sZXMiOlsiY3VzdG9tZXIiXSwiaWF0IjoxNDAxMTI3NTYxLCJleHAiOjE0MDExMzExNjF9.eFjb_mQ413Dz8YUorVREuCYDvHrrZRopg89m-kD4Jh8
@@ -108,8 +108,8 @@ which returns:
 }
 ```
 
-Looking good! Where can we go next? We still have one link left to try: '/appointments'. Here we can manage our appointments (create, view, update and delete with the standard GET, POST, PUT, PATCH and DELETE HTTP verbs). 
-Let's create a new appointment by POSTing to '/appointments' (with the authorization header set properly). The data for our appointment is:
+Looking good! Where can we go next? We still have one link left to try: ```/appointments```. Here we can manage our appointments (create, view, update and delete with the standard GET, POST, PUT, PATCH and DELETE HTTP verbs). 
+Let's create a new appointment by POSTing to ```/appointments``` (with the authorization header set properly). The data for the appointment is:
 
 ```json
 {
@@ -141,7 +141,7 @@ The response has HTTP status code 201 (created) and the body contains the newly 
 }
 ```
 
-We now have one appointment stored in the database. The GET request for '/appointments' returns all our appointments:
+The appointment is stored in the database and a GET request for ```/appointments``` returns all our appointments:
 
 ```json
 {
@@ -169,7 +169,7 @@ We now have one appointment stored in the database. The GET request for '/appoin
 }
 ```
 
-Existing appointments can be modified or deleted at '/appointments/:id' with the PUT, PATCH and DELETE verbs. Let's say we want to reschedule the appointment. This can be done by sending a PATCH request to '/appointments/53838715fd51be21ee42b7d4' with the new date and time:
+Existing appointments can be modified or deleted at ```/appointments/:id``` with the PUT, PATCH and DELETE verbs. Let's say we want to reschedule the appointment. This can be done by sending a PATCH request to ```/appointments/53838715fd51be21ee42b7d4``` with the new date and time:
 
 ```json
 {
