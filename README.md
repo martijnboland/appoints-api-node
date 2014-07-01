@@ -67,22 +67,25 @@ Following the links, you can see 2 other resources: ```/me``` and ```/appointmen
 Alright, so we're not supposed to view the resource unauthenticated and we need to supply an authorization token. How can we get a token? Perhaps follow one of the links? We're going to try the Google route: ```http://localhost:3000/auth/google```. At this point there are two options: 
 
 1. Do a GET request that will redirect to the Google authentication/authorization page that redirects back to our API after successful authorization. After this, we generate our own JWT token and redirect again with the access_token in the hash: ```http://localhost/auth/loggedin#access_token=eyJ0eXAiOiJK...```. From here, things are unfortunately a bit hacky because this is the only place where the API doesn't return a nice JSON response but HTML with a script that posts the access_token back to the opener window:
-```javascript
-if (window.opener) { window.opener.postMessage(window.location.hash.replace("#access_token=", ""), "*"); }
-```
-This is to facilitate browser clients from other domains that use a popup browser window for the authentication flow but can not access the access_token hash due to cross-domain restrictions. With postMessage() it's possible to send values between browser windows and different domains. 
+
+    ```
+    if (window.opener) { window.opener.postMessage(window.location.hash.replace("#access_token=", ""), "*"); }
+    ```
+This to facilitate browser clients from other domains that use a popup browser window for the authentication flow but can not access the access_token hash due to cross-domain restrictions. With postMessage() it's possible to send values between browser windows and different domains. 
+
 2. Do a POST request to the same url with an already obtained token via some client API. This generates the authorization token:
-```json
-{
-	"message": "Authentication successful",
-	"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjUzN2Y2Yjk4MzFhNTEyYWJjY2Q1OGE5OCIsImVtYWlsIjoibWFydGlqbmJvbGFuZEBnbWFpbC5jb20iLCJkaXNwbGF5TmFtZSI6Ik1hcnRpam4gQm9sYW5kIiwicm9sZXMiOlsiY3VzdG9tZXIiXSwiaWF0IjoxNDAxMTI3NTYxLCJleHAiOjE0MDExMzExNjF9.eFjb_mQ413Dz8YUorVREuCYDvHrrZRopg89m-kD4Jh8",
-	"_links":{
-		"self": {"href":"/"},
-		"me": {"href":"/me"},
-		"appointments": {"href":"/appointments"}
-	}
-}
-```
+
+    ```json
+    {
+    	"message": "Authentication successful",
+    	"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjUzN2Y2Yjk4MzFhNTEyYWJjY2Q1OGE5OCIsImVtYWlsIjoibWFydGlqbmJvbGFuZEBnbWFpbC5jb20iLCJkaXNwbGF5TmFtZSI6Ik1hcnRpam4gQm9sYW5kIiwicm9sZXMiOlsiY3VzdG9tZXIiXSwiaWF0IjoxNDAxMTI3NTYxLCJleHAiOjE0MDExMzExNjF9.eFjb_mQ413Dz8YUorVREuCYDvHrrZRopg89m-kD4Jh8",
+    	"_links":{
+    		"self": {"href":"/"},
+    		"me": {"href":"/me"},
+    		"appointments": {"href":"/appointments"}
+    	}
+    }
+    ```
 
 If things went alright, we now have the authorization token. We try the ```/me``` link again but now with the authorization header HTTP HEADER set: 
 
