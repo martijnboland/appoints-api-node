@@ -1,7 +1,7 @@
 Appoints-Api
 ============
 
-Appoints-Api is a simple example appointment scheduler REST API built with Node.js, Express 4 and Mongodb.
+Appoints-Api is a simple example appointment scheduler REST API built with Node.js, Express 4 and Mongodb. A client that consumes this API can be found at https://github.com/martijnboland/appoints-client.
 
 Features
 --------
