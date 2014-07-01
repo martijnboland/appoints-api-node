@@ -35,9 +35,9 @@ Usage
 -----
 When the server is running locally, you can try the api with a browser, curl or an API testing tool like [Postman](http://www.getpostman.com/). If you don't have a local server running, you can try the API at https://appoints-api.azurewebsites.net/ instead of http://localhost:3000/.
 
-The default response content type is application/hal+json. It's also possible to request application/json by adding the Accept: application/json header to the request. POST, PUT and PATCH requests need to have their content-type set to application/json.
+The default response content type is ```application/hal+json```. It's also possible to request ```application/json``` by adding the ```Accept: application/json``` header to the request. POST, PUT and PATCH requests need to have their content-type set to ```application/json```.
 
-Start with GET http://localhost:3000/:
+Start with ```GET http://localhost:3000/```:
 
 ```json
 {
@@ -51,7 +51,7 @@ Start with GET http://localhost:3000/:
 }
 ```
  
-Following the links, you can see 2 other resources: '/me' and '/appointments'. Let's go to '/me' and see what happens:
+Following the links, you can see 2 other resources: ```/me``` and ```/appointments```. Let's go to ```/me``` and see what happens:
 
 ```json
 {
@@ -64,8 +64,14 @@ Following the links, you can see 2 other resources: '/me' and '/appointments'. L
 }
 ```
 
-Alright, so we're not supposed to view the resource unauthenticated and we need to supply an authorization token. How can we get a token? Perhaps follow one of the links? We're going to try the Google route: http://localhost:3000/auth/google. At this point there are two options: do a GET request that will redirect to the Google authentication/authorization page that redirects back to our API after successful authentication, or do a POST request to the same url with an already obtained token. The first scenario is suitable for web browser apps where the second scenario is better suited for mobile apps where access tokens can be obtained beforehand via native components. Successful authentication generates the authorization token:
+Alright, so we're not supposed to view the resource unauthenticated and we need to supply an authorization token. How can we get a token? Perhaps follow one of the links? We're going to try the Google route: ```http://localhost:3000/auth/google```. At this point there are two options: 
 
+1. Do a GET request that will redirect to the Google authentication/authorization page that redirects back to our API after successful authorization. After this, we generate our own JWT token and redirect again with the access_token in the hash: ```http://localhost/auth/loggedin#access_token=eyJ0eXAiOiJK...```. From here, things are unfortunately a bit hacky because this is the only place where the API doesn't return a nice JSON response but HTML with a script that posts the access_token back to the opener window:
+```javascript
+if (window.opener) { window.opener.postMessage(window.location.hash.replace("#access_token=", ""), "*"); }
+```
+This is to facilitate browser clients from other domains that use a popup browser window for the authentication flow but can not access the access_token hash due to cross-domain restrictions. With postMessage() it's possible to send values between browser windows and different domains. 
+2. Do a POST request to the same url with an already obtained token via some client API. This generates the authorization token:
 ```json
 {
 	"message": "Authentication successful",
@@ -78,7 +84,7 @@ Alright, so we're not supposed to view the resource unauthenticated and we need 
 }
 ```
 
-Here we have the authorization token (JWT). Also, the response contains links where we can go next. We try the '/me' link again but now with the authorization header HTTP HEADER set: 
+If things went alright, we now have the authorization token. We try the ```/me``` link again but now with the authorization header HTTP HEADER set: 
 
 ```
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjUzN2Y2Yjk4MzFhNTEyYWJjY2Q1OGE5OCIsImVtYWlsIjoibWFydGlqbmJvbGFuZEBnbWFpbC5jb20iLCJkaXNwbGF5TmFtZSI6Ik1hcnRpam4gQm9sYW5kIiwicm9sZXMiOlsiY3VzdG9tZXIiXSwiaWF0IjoxNDAxMTI3NTYxLCJleHAiOjE0MDExMzExNjF9.eFjb_mQ413Dz8YUorVREuCYDvHrrZRopg89m-kD4Jh8
