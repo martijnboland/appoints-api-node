@@ -56,7 +56,7 @@ exports.getByUser = function (req, res) {
       self: { href: '/appointments' }
     },
     _embedded: {
-      appointment: []
+      appointments: []
     },
     count: 0
   };
@@ -70,7 +70,7 @@ exports.getByUser = function (req, res) {
       }
       result.count = appointments.length;
       for (var i = 0; i < result.count; i++) {
-        result._embedded.appointment.push(mapAppointment(appointments[i]));
+        result._embedded.appointments.push(mapAppointment(appointments[i]));
       }
       res.send(200, result);
     });  
