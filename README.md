@@ -149,7 +149,7 @@ The appointment is stored in the database and a GET request for ```/appointments
 		"self": {"href":"/appointments"}
 	},
 	"_embedded": {
-		"appointments":[{
+		"appointment":[{
 			"_links": {
 				"self": {"href":"/appointments/53838715fd51be21ee42b7d4"},
 				"user": {
