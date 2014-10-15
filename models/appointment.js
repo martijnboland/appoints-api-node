@@ -16,7 +16,7 @@ AppointmentSchema.virtual('duration')
   .get(function () {
     var durationMs = this.endDateAndTime - this.dateAndTime;
     if (durationMs) {
-      return Math.round(((durationMs % 86400000) % 3600000) / 60000);
+      return Math.abs(this.endDateAndTime - this.dateAndTime) / 1000 / 60;
     }
     else {
       return;
