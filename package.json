@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "An appointment scheduler service",
   "main": "server.js",
+  "engines": {
+    "node": "5.5.0 || 5.7.0"
+  },
   "dependencies": {
     "body-parser": "~1.0.x",
     "cors": "^2.3.1",
