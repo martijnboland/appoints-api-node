@@ -21,8 +21,10 @@ Getting started
 4. Install packages:
 
 		npm install
+
+5. Create a config file for the development environment by copying /config/example.js to /config/development.js.
 		
-5. Run the server (default on http://localhost:3000/):
+6. Run the server (default on http://localhost:3000/):
 
 		node index.js
 		
