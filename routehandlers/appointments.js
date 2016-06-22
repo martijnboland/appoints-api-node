@@ -23,15 +23,15 @@ exports.create = function (req, res) {
   newAppointment.save(function (err, savedAppointment) {
     if (err) {
       if (err.name === 'ValidationError') {
-        res.send(422, err);
+        res.status(422).send(err);
       }
       else {
-        res.send(400, err);
+        res.status(400).send(err);
       }
       return;
     }
     res.set('Location', '/appointments/' + savedAppointment.id);
-    res.send(201, mapAppointment(savedAppointment));
+    res.status(201).send(mapAppointment(savedAppointment));
   });
 };
 
@@ -42,10 +42,10 @@ exports.getById = function (req, res) {
       throw err;
     }
     if (dbAppointment === null) {
-      res.send(404, { message: 'Appointment can not be found' });
+      res.status(404).send({ message: 'Appointment can not be found' });
     } 
     else {
-      res.send(200, mapAppointment(dbAppointment));
+      res.status(200).send(mapAppointment(dbAppointment));
     }
   });
 };
@@ -72,7 +72,7 @@ exports.getByUser = function (req, res) {
       for (var i = 0; i < result.count; i++) {
         result._embedded.appointment.push(mapAppointment(appointments[i]));
       }
-      res.send(200, result);
+      res.status(200).send(result);
     });  
 };
 
@@ -83,7 +83,7 @@ exports.update = function (req, res) {
       throw err;
     }
     if (dbAppointment === null) {
-      res.send(404, { message: 'Appointment can not be found' });
+      res.status(404).send({ message: 'Appointment can not be found' });
     } 
     else {
       // maybe we should add a check for a complete object in case of a PUT request?
@@ -91,14 +91,14 @@ exports.update = function (req, res) {
       dbAppointment.save(function (err, updatedDbAppointment) {
         if (err) {
           if (err.name === 'ValidationError') {
-            res.send(422, err);
+            res.status(422).send(err);
           }
           else {
-            res.send(400, err);
+            res.status(400).send(err);
           }
           return;
         }
-        res.send(200, mapAppointment(updatedDbAppointment));
+        res.status(200).send(mapAppointment(updatedDbAppointment));
       })
     }
   });
@@ -111,15 +111,15 @@ exports.delete = function (req, res) {
       throw err;
     }
     if (dbAppointment === null) {
-      res.send(404, { message: 'Appointment can not be found' });
+      res.status(404).send({ message: 'Appointment can not be found' });
     } 
     else {
       dbAppointment.remove(function (err) {
         if (err) {
-          res.send(400, err);
+          res.status(400).send(err);
           return;
         }
-        res.send(200, { message: 'Appointment deleted' } );
+        res.status(200).send({ message: 'Appointment deleted' } );
       })
     }
   });

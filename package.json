@@ -4,7 +4,7 @@
   "description": "An appointment scheduler service",
   "main": "server.js",
   "engines": {
-    "node": "5.5.0 || 5.7.0"
+    "node": ">= 4.0.0"
   },
   "dependencies": {
     "body-parser": "~1.0.x",
@@ -14,10 +14,9 @@
     "leisure": "^0.1.0",
     "moment": "^2.7.0",
     "mongoose": "^4.5.1",
-    "passport": "^0.2.0",
-    "passport-facebook": "^1.0.3",
-    "passport-google-oauth": "^0.1.5",
-    "passport-google-plus": "^0.2.0",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth": "^1.0.0",
     "sanitizer": "^0.1.1"
   },
   "devDependencies": {

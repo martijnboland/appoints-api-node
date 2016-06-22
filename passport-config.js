@@ -36,7 +36,7 @@ exports.configure = function () {
       callbackURL: config.settings.authProviders.facebook.callbackUrl
     },
     function(accessToken, refreshToken, profile, done) {
-      return handleProviderResponse('facebook', profile.id, profile.emails[0].value, profile.displayName, accessToken, refreshToken, done);
+      return handleProviderResponse('facebook', profile.id, profile.email, profile.displayName, accessToken, refreshToken, done);
     }
   ));
 

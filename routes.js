@@ -28,11 +28,11 @@ router.get('/auth/facebook/callback',
 router.post('/auth/facebook', auth.facebooktoken);
 
 router.get('/auth/google', 
-  passport.authenticate('google', { scope: ['openid', 'email', 'profile'] })
+  passport.authenticate('google', { scope: ['email', 'profile'] })
 );
 
 router.get('/auth/google/callback', 
-  passport.authenticate('google', { scope: ['openid', 'email', 'profile'] }),
+  passport.authenticate('google', { scope: ['email', 'profile'] }),
   auth.externalcallback
 );
 

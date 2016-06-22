@@ -10,5 +10,5 @@ module.exports = function (req, res) {
     displayName: user.displayName,
     roles: user.roles
   };
-  res.send(200, result);
+  res.status(200).send(result);
 }

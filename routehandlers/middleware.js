@@ -6,7 +6,7 @@ var sanitizer = require('sanitizer');
 exports.ensureAuthenticated =  function (req, res, next) {
 
   function notAuthenticated (details) {
-    res.send('401', { 
+    res.status(401).send({ 
       message: 'Access to ' + req.path + ' is not allowed.',
       details: details,
       _links: {
@@ -37,11 +37,11 @@ exports.ensureAuthenticated =  function (req, res, next) {
       }
     } 
     else {
-      notAuthenticated('Invalid header. Format is Authorization: Bearer [token]');
+      return notAuthenticated('Invalid header. Format is Authorization: Bearer [token]');
     }
   } 
   else {
-    notAuthenticated('No Authorization header was found. Format is Authorization: Bearer [token]');
+    return notAuthenticated('No Authorization header was found. Format is Authorization: Bearer [token]');
   }
 
   jwt.verify(token, config.settings.tokenSecret, null, function(err, decoded) {

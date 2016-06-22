@@ -6,6 +6,6 @@ exports.createTokenForUser = function (user, expiresInMinutes) {
     roles: user.roles
   };
   // TODO: we need to dynamically set issuer and audience
-  var token = jwt.sign(payload, config.settings.tokenSecret, { subject: user.id, expiresInMinutes: expiresInMinutes });
+  var token = jwt.sign(payload, config.settings.tokenSecret, { subject: user.id, expiresIn: expiresInMinutes * 60 });
   return token;
 }
