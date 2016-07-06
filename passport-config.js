@@ -33,10 +33,11 @@ exports.configure = function () {
   passport.use(new FacebookStrategy({
       clientID: config.settings.authProviders.facebook.clientId,
       clientSecret: config.settings.authProviders.facebook.clientSecret,
-      callbackURL: config.settings.authProviders.facebook.callbackUrl
+      callbackURL: config.settings.authProviders.facebook.callbackUrl,
+      profileFields: ['id', 'email', 'displayName']
     },
     function(accessToken, refreshToken, profile, done) {
-      return handleProviderResponse('facebook', profile.id, profile.email, profile.displayName, accessToken, refreshToken, done);
+      return handleProviderResponse('facebook', profile.id, profile.emails[0].value, profile.displayName, accessToken, refreshToken, done);
     }
   ));
 

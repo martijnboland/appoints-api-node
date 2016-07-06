@@ -2,7 +2,7 @@
   "name": "appoints2",
   "version": "0.1.0",
   "description": "An appointment scheduler service",
-  "main": "server.js",
+  "main": "index.js",
   "engines": {
     "node": ">= 4.0.0"
   },
