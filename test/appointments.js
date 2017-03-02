@@ -94,8 +94,8 @@ describe('Appointment tests', function () {
         .end(function (err, res) {
           should.not.exist(err);
           res.body.should.have.property('count', 2);
-          res.body._embedded.appointments.should.have.a.lengthOf(2);
-          res.body._embedded.appointments[0].title.should.equal('Testappointment 2');
+          res.body._embedded.appointment.should.have.a.lengthOf(2);
+          res.body._embedded.appointment[0].title.should.equal('Testappointment 2');
           done();
         });
     });
