@@ -1,6 +1,6 @@
 var config = require('./config');
 var passport = require('passport');
-var FacebookStrategy = require('passport-facebook').Strategy;
+var FacebookStrategy = require('@passport-next/passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var User = require('./models/user');
 

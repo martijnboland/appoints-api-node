@@ -7,6 +7,7 @@
     "node": ">= 4.0.0"
   },
   "dependencies": {
+    "@passport-next/passport-facebook": "^2.5.0",
     "body-parser": "~1.0.x",
     "cors": "^2.3.1",
     "express": "~4.x",
@@ -15,7 +16,6 @@
     "moment": "^2.7.0",
     "mongoose": "^4.5.1",
     "passport": "^0.3.2",
-    "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
     "sanitizer": "^0.1.1"
   },
