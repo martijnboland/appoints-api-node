@@ -16,17 +16,6 @@ router.get('/', index.index);
 router.get('/me', middleware.ensureAuthenticated, me)
 
   // Authentication provider routes
-router.get('/auth/facebook', 
-  passport.authenticate('facebook', { scope: 'email' })
-);
-
-router.get('/auth/facebook/callback', 
-  passport.authenticate('facebook', { scope: 'email' }),
-  auth.externalcallback
-);
-
-router.post('/auth/facebook', auth.facebooktoken);
-
 router.get('/auth/google', 
   passport.authenticate('google', { scope: ['email', 'profile'] })
 );

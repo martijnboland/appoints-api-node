@@ -7,7 +7,6 @@
     "node": ">= 4.0.0"
   },
   "dependencies": {
-    "@passport-next/passport-facebook": "^2.5.0",
     "body-parser": "~1.0.x",
     "cors": "^2.3.1",
     "express": "~4.x",
