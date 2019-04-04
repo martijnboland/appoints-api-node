@@ -10,7 +10,6 @@ exports.ensureAuthenticated =  function (req, res, next) {
       message: 'Access to ' + req.path + ' is not allowed.',
       details: details,
       _links: {
-        auth_facebook: { href: '/auth/facebook' }, 
         auth_google: { href: '/auth/google' }
       }
     });

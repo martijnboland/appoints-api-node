@@ -9,21 +9,6 @@ var config = require('../config');
 
 describe('Authentication tests', function () {
 
-  describe('GET /auth/facebook', function () {
-   
-    it('returns a 302 redirect to facebook for authentication', function (done) {
-      request(app)
-        .get('/auth/facebook')
-        .expect(302)
-        .end(function (err, res) {
-          should.not.exist(err);
-          res.header.location.should.include('facebook');
-          done();
-        });
-    });
-
-  });
-
   describe('GET /auth/google', function () {
    
     it('returns a 302 redirect to google for authentication', function (done) {
@@ -38,23 +23,6 @@ describe('Authentication tests', function () {
     });
 
   });
-
-  describe('POST /auth/facebook', function () {
-   
-    it('returns a 401 when an invalid facebook token is sent', function (done) {
-      request(app)
-        .post('/auth/facebook')
-        .set('Accept', 'application/json')
-        .send({ token: 'an invalid token'})
-        .expect(401)
-        .end(function (err, res) {
-          should.not.exist(err);
-          res.body.message.should.startWith('Access denied');
-          done();
-        });
-    });
-
-  });  
 
   describe('POST /auth/google', function () {
    
