@@ -7,12 +7,12 @@
     "node": ">= 4.0.0"
   },
   "dependencies": {
-    "body-parser": "~1.0.x",
-    "cors": "^2.3.1",
-    "express": "~4.x",
-    "jsonwebtoken": "^5.7.0",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
     "leisure": "^0.1.0",
-    "moment": "^2.7.0",
+    "moment": "^2.24.0",
     "mongoose": "^4.5.1",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",

@@ -16,7 +16,7 @@ passportConfig.configure();
 
 var app = express();
 app.use(cors(config.settings.cors));
-app.use(bodyParser());
+app.use(bodyParser.json())
 app.use(leisure.accept(mediaTypes));
 app.use(passport.initialize());
 
