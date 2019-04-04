@@ -19,13 +19,13 @@
     "sanitizer": "^0.1.1"
   },
   "devDependencies": {
-    "mocha": "^1.18.2",
-    "should": "^3.3.1",
-    "supertest": "^0.12.1"
+    "mocha": "^6.0.2",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2"
   },
   "scripts": {
     "start": "node index.js",
-    "test": "NODE_ENV=test mocha --reporter spec test"
+    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --reporter spec test"
   },
   "author": "Martijn Boland",
   "license": "MIT"

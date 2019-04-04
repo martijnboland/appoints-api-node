@@ -10,11 +10,6 @@ var settings = {
     connectionString: 'mongodb://localhost/appointstest'
   }, 
   authProviders: {
-    facebook: { 
-      clientId: 'test', 
-      clientSecret: '1234567890', 
-      callbackUrl: 'http://localhost:3000/auth/facebook/callback' 
-    },
     google: { 
       clientId: 'test', 
       clientSecret: '1234567890', 

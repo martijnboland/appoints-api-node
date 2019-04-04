@@ -13,10 +13,16 @@ var testUserData = {
 
 describe('User persistence tests (env: ' + process.env.NODE_ENV + ')', function() {
   beforeEach(function (done) {
-    mongoose.connect(config.settings.db.connectionString);
-    User.remove({}, function(err) {
-      done();
-    });
+    mongoose.connect(config.settings.db.connectionString, {useNewUrlParser: true, useCreateIndex: true })
+      .then(function () {
+        User.deleteMany({}, function(err) {
+          if (err) {
+            done(err);
+          } else {
+            done();
+          }
+        });    
+      })
   });
 
   describe('Create user', function () {
@@ -49,8 +55,12 @@ describe('User persistence tests (env: ' + process.env.NODE_ENV + ')', function(
     beforeEach(function (done) {
       var dbUser = new User(testUserData);
       dbUser.save(function(err, savedUser) {
-        userId = savedUser.id;
-        done();
+        if (err) {
+          done(err)
+        } else {
+          userId = savedUser.id;
+          done();            
+        }
       });
     });
 

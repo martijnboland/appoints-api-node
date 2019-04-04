@@ -23,26 +23,31 @@ AppointmentSchema.virtual('duration')
     }
   });
 
-AppointmentSchema.path('dateAndTime').validate(function (value, done) {
-  var self = this;
-  return mongoose.models.Appointment.find( { 
-    '_id': { $ne: self._id },
-    'user.id': self.user.id,
-    $or: [ 
-      { dateAndTime: { $lt: self.endDateAndTime, $gte: self.dateAndTime } }, 
-      { endDateAndTime: { $lte: self.endDateAndTime, $gt: self.dateAndTime } }
-    ] 
-  }, function (err, appointments) {
-    done(! appointments || appointments.length === 0);
-  });
-}, "The appointment overlaps with other appointments");
+AppointmentSchema.path('dateAndTime').validate({
+  validator: function (value) {
+    var self = this;
+    return new Promise(function(resolve, reject) {
+      mongoose.models.Appointment.find( { 
+        '_id': { $ne: self._id },
+        'user.id': self.user.id,
+        $or: [ 
+          { dateAndTime: { $lt: self.endDateAndTime, $gte: self.dateAndTime } }, 
+          { endDateAndTime: { $lte: self.endDateAndTime, $gt: self.dateAndTime } }
+        ] 
+      }, function (err, appointments) {
+        resolve(! appointments || appointments.length === 0);
+      });  
+    })
+  },
+  message: "The appointment overlaps with other appointments"
+});
 
-AppointmentSchema.path('dateAndTime').validate(function (value, done) {
+AppointmentSchema.path('dateAndTime').validate(function (value) {
   var isValid = true;
   if (value < new Date()) {
     isValid = false;
   }
-  done(isValid);
+  return isValid;
 }, "The appointment can not be scheduled in the past");
 
 

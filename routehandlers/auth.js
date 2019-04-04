@@ -17,7 +17,7 @@ function sendLoggedInResponseForUser (user, res) {
 }
 
 function sendTokenValidationError (res, err) {
-  res.send('401', {
+  res.status(401).send({
     message: 'Access denied (unable to authenticate)',
     details: err
   });

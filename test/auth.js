@@ -17,7 +17,7 @@ describe('Authentication tests', function () {
         .expect(302)
         .end(function (err, res) {
           should.not.exist(err);
-          res.header.location.should.include('google');
+          res.header.location.should.containEql('google');
           done();
         });
     });
@@ -45,12 +45,18 @@ describe('Authentication tests', function () {
     var user = {};
 
     before(function (done) {
-      mongoose.connect(config.settings.db.connectionString);
-      var dbUser = new User({ provider: 'Test', userId: 'Test userId', email: 'test@test.com', displayName: 'Test user' } );
-      dbUser.save(function(err, savedUser) {
-        user = savedUser;
-        done();
-      });
+      mongoose.connect(config.settings.db.connectionString, { useNewUrlParser: true })
+        .then(function () {
+          var dbUser = new User({ provider: 'Test', userId: 'Test userId', email: 'test@test.com', displayName: 'Test user' } );
+          dbUser.save(function(err, savedUser) {
+            if (err) {
+              done(err);
+            } else {
+              user = savedUser;
+              done();  
+            }
+          });    
+        });
     });
       
     it('returns a 401 response when no authorization header is set', function (done) {
@@ -125,7 +131,7 @@ describe('Authentication tests', function () {
     });
 
     after(function (done) {
-      User.remove({}, function(err) {
+      User.deleteMany({}, function(err) {
         mongoose.disconnect();
         if (err) {
           throw err;
